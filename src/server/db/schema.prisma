@@ -1,0 +1,119 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 一開始只註冊了電話號碼，一開始未必有用戶姓名
+  name String? @db.VarChar(255)
+
+  // 一開始未必有用戶名
+  username String? @db.VarChar(255)
+
+  // 一開始註冊一定有電話號碼
+  phoneNumber String @db.VarChar(255)
+
+  // 一個用戶可以有好多 team，包括自己的 personal team
+  teams UsersOnTeams[]
+
+  // 指向 personal team，沒什麼用
+  ownTeams Team[]
+
+  // phoneNumber 用於登入，所以是唯一
+  // 一開始未填有 username，所以是 index
+  @@unique([phoneNumber])
+  @@index([username])
+}
+
+model Team {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  name      String   @db.VarChar(255)
+
+  slug String @db.VarChar(255)
+
+  // 一定有 team 邀請碼，預設產生
+  inviteCode String @default(cuid()) @db.VarChar(255)
+
+  // 創建 user 時也會創建他專有的 personal team
+  // 有 userId 代表是 personal team
+  userId String? @db.VarChar(255)
+
+  // team 會有成員
+  members UsersOnTeams[]
+
+  // personal team 才有，指向用戶
+  user User? @relation(fields: [userId], references: [id])
+
+  // team 裡的 project
+  projects Project[]
+
+  // team 一定有 slug
+  // team 一定有邀請碼
+  @@unique([slug])
+  @@unique([inviteCode])
+}
+
+model UsersOnTeams {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // 成員是哪個 team
+  teamId String @db.VarChar(255)
+  // 成員是哪個 user
+  userId String @db.VarChar(255)
+
+  // 是否管理員
+  isAdmin Boolean @default(false)
+
+  // 成員所屬的 team
+  team Team @relation(fields: [teamId], references: [id])
+
+  // 成員所屬的 user
+  user User @relation(fields: [userId], references: [id])
+
+  // team 和 user 是唯一
+  @@unique([teamId, userId])
+}
+
+model Project {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // project 名
+  name String @db.VarChar(255)
+
+  type String @db.VarChar(255)
+
+  // project 網址名
+  // slug String @default(cuid()) @db.VarChar(255)
+
+  // project number
+  num Int
+
+  // 屬於哪一個 team (一定有 team)
+  teamId String @db.VarChar(255)
+
+  // 專案會被關閉
+  closedAt DateTime?
+
+  // project 所屬的 team
+  team Team @relation(fields: [teamId], references: [id])
+
+  // @@unique([teamId, slug])
+  @@unique([teamId, num])
+}
