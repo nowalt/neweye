@@ -97,8 +97,6 @@ model Project {
   // project 名
   name String @db.VarChar(255)
 
-  type String @db.VarChar(255)
-
   // project 網址名
   // slug String @default(cuid()) @db.VarChar(255)
 
@@ -114,6 +112,102 @@ model Project {
   // project 所屬的 team
   team Team @relation(fields: [teamId], references: [id])
 
+  eyes                 Eye[]
+  eyeRecords           EyeRecord[]
+  eyeRecordResults     EyeRecordResult[]
+  eyeRecordAttachments EyeRecordAttachment[]
+
   // @@unique([teamId, slug])
   @@unique([teamId, num])
+}
+
+model Eye {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // eye 名
+  name String @db.VarChar(255)
+
+  // eye type
+  type String @db.VarChar(255)
+
+  // eye number
+  num Int
+
+  projectId String @db.VarChar(255)
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  records           EyeRecord[]
+  recordResults     EyeRecordResult[]
+  recordAttachments EyeRecordAttachment[]
+
+  @@unique([projectId, num])
+}
+
+model EyeRecord {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eyeId String @db.VarChar(255)
+
+  clientId String @default("default") @db.VarChar(255)
+
+  date DateTime @default(now())
+
+  data Json?
+
+  projectId String @db.VarChar(255)
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  results EyeRecordResult[]
+
+  eye Eye @relation(fields: [eyeId], references: [id])
+
+  attachment EyeRecordAttachment?
+}
+
+model EyeRecordResult {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eyeId    String @db.VarChar(255)
+  recordId String @db.VarChar(255)
+
+  date DateTime @default(now())
+
+  type  String @db.VarChar(255)
+  count Int    @default(0)
+
+  projectId String @db.VarChar(255)
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  eye    Eye       @relation(fields: [eyeId], references: [id])
+  record EyeRecord @relation(fields: [recordId], references: [id])
+}
+
+model EyeRecordAttachment {
+  id        String   @id @default(cuid()) @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name String @db.VarChar(255)
+  type String @db.VarChar(255)
+  size Int
+  key  String @db.VarChar(255)
+  url  String @db.VarChar(255)
+
+  eyeId     String  @db.VarChar(255)
+  recordId  String? @db.VarChar(255)
+  projectId String  @db.VarChar(255)
+
+  project Project @relation(fields: [projectId], references: [id])
+
+  eye    Eye        @relation(fields: [eyeId], references: [id])
+  record EyeRecord? @relation(fields: [recordId], references: [id])
 }
