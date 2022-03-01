@@ -95,6 +95,8 @@ const App = () => {
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  console.log("App render!!!!!!");
+
   useEffect(() => {
     tf.loadGraphModel(weights).then((model) => {
       modelRef.current = model;
@@ -103,7 +105,7 @@ const App = () => {
   }, []);
 
   const detect = useCallback(async () => {
-    console.log("detect called!", Date.now());
+    // console.log("detect called!", Date.now());
 
     // console.log("!modelRef.current", !modelRef.current);
     // console.log("!webcamRef.current", !webcamRef.current);
@@ -144,12 +146,11 @@ const App = () => {
 
     // 4. TODO - Make Detections
     const img = tf.browser.fromPixels(video);
-    const input = tf.image
-      .resizeBilinear(img, [640, 640])
-      .div(255.0)
-      .expandDims(0);
+    const resized = tf.image.resizeBilinear(img, [640, 640]);
+    const dived = resized.div(255.0);
+    const expanded = dived.expandDims(0);
 
-    const obj = await modelRef.current.executeAsync(input);
+    const obj = await modelRef.current.executeAsync(expanded);
 
     // console.log(obj);
 
@@ -171,51 +172,53 @@ const App = () => {
     // console.log("valid_detections_data", valid_detections_data);
 
     tf.dispose(img);
-    tf.dispose(input);
+    tf.dispose(resized);
+    tf.dispose(dived);
+    tf.dispose(expanded);
     tf.dispose(obj);
 
-    requestAnimationFrame(() => {
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // requestAnimationFrame(() => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-      let i;
-      for (i = 0; i < valid_detections_data; ++i) {
-        let [x1, y1, x2, y2] = boxes_data.slice(i * 4, (i + 1) * 4);
-        x1 *= c.width;
-        x2 *= c.width;
-        y1 *= c.height;
-        y2 *= c.height;
-        const width = x2 - x1;
-        const height = y2 - y1;
-        const klass = names[classes_data[i]];
-        const score = scores_data[i].toFixed(2);
+    let i;
+    for (i = 0; i < valid_detections_data; ++i) {
+      let [x1, y1, x2, y2] = boxes_data.slice(i * 4, (i + 1) * 4);
+      x1 *= c.width;
+      x2 *= c.width;
+      y1 *= c.height;
+      y2 *= c.height;
+      const width = x2 - x1;
+      const height = y2 - y1;
+      const klass = names[classes_data[i]];
+      const score = scores_data[i].toFixed(2);
 
-        // Draw the bounding box.
-        ctx.strokeStyle = "#00FFFF";
-        ctx.lineWidth = 4;
-        ctx.strokeRect(x1, y1, width, height);
+      // Draw the bounding box.
+      ctx.strokeStyle = "#00FFFF";
+      ctx.lineWidth = 4;
+      ctx.strokeRect(x1, y1, width, height);
 
-        // Draw the label background.
-        ctx.fillStyle = "#00FFFF";
-        const textWidth = ctx.measureText(klass + ":" + score).width;
-        const textHeight = parseInt(font, 10); // base 10
-        ctx.fillRect(x1, y1, textWidth + 4, textHeight + 4);
-      }
-      for (i = 0; i < valid_detections_data; ++i) {
-        let [x1, y1, ,] = boxes_data.slice(i * 4, (i + 1) * 4);
-        x1 *= c.width;
-        y1 *= c.height;
-        const klass = names[classes_data[i]];
-        const score = scores_data[i].toFixed(2);
+      // Draw the label background.
+      ctx.fillStyle = "#00FFFF";
+      const textWidth = ctx.measureText(klass + ":" + score).width;
+      const textHeight = parseInt(font, 10); // base 10
+      ctx.fillRect(x1, y1, textWidth + 4, textHeight + 4);
+    }
+    for (i = 0; i < valid_detections_data; ++i) {
+      let [x1, y1, ,] = boxes_data.slice(i * 4, (i + 1) * 4);
+      x1 *= c.width;
+      y1 *= c.height;
+      const klass = names[classes_data[i]];
+      const score = scores_data[i].toFixed(2);
 
-        // Draw the text last to ensure it's on top.
-        ctx.fillStyle = "#000000";
-        ctx.fillText(klass + ":" + score, x1, y1);
-      }
+      // Draw the text last to ensure it's on top.
+      ctx.fillStyle = "#000000";
+      ctx.fillText(klass + ":" + score, x1, y1);
+    }
 
-      setTimeout(() => {
-        detect();
-      }, 1);
-    });
+    setTimeout(() => {
+      detect();
+    }, 1);
+    // });
 
     return;
   }, []);
