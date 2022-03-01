@@ -89,7 +89,7 @@ const names = [
   "toothbrush",
 ];
 
-const App = () => {
+const App = ({ w = 640, h = 480 }: any = {}) => {
   const modelRef = useRef<any>();
   const [timerId, setTimerId] = useState<any>();
   const webcamRef = useRef<Webcam>(null);
@@ -243,11 +243,11 @@ const App = () => {
             left: 0,
             right: 0,
             zIndex: 9,
-            width: 640,
-            height: 480,
+            width: w,
+            height: h,
           }}
-          width={640}
-          height={480}
+          width={w}
+          height={h}
         />
         <canvas
           ref={canvasRef}
@@ -259,11 +259,11 @@ const App = () => {
             left: 0,
             right: 0,
             zIndex: 9,
-            width: 640,
-            height: 480,
+            width: w,
+            height: h,
           }}
-          width={640}
-          height={480}
+          width={w}
+          height={h}
         />
       </div>
     </>
