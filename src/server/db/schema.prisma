@@ -121,6 +121,7 @@ model Project {
   @@unique([teamId, num])
 }
 
+// 攝像頭
 model Eye {
   id        String   @id @default(cuid()) @db.VarChar(255)
   createdAt DateTime @default(now())
