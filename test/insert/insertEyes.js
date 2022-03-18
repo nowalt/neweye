@@ -11,16 +11,23 @@ module.exports = async (prisma, ctx) => {
     },
     {
       name: 'eye2',
-      type: 'YOLOv2',
+      type: 'YOLOv1',
       num: 2,
-      projectId: projectObjs.project2.id
+      projectId: projectObjs.project1.id
     },
     {
       name: 'eye3',
-      type: 'R-FCN',
+      type: 'YOLOv2',
       num: 3,
+      projectId: projectObjs.project2.id
+    },
+    {
+      name: 'eye4',
+      type: 'R-FCN',
+      num: 4,
       projectId: projectObjs.project3.id
     }
+
   ]
 
   const docs = await prisma.$transaction(
