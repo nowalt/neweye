@@ -20,7 +20,7 @@ module.exports = async (prisma, ctx) => {
       type: 'people',
       count: 13,
       projectId: projectObjs.project1.id,
-      date: new Date(2022, 1, 1, 9, 0)
+      date: new Date(2022, 1, 1, 8, 1)
     },
     {
       eyeId: eyeObjs.eye1.id,
@@ -28,7 +28,7 @@ module.exports = async (prisma, ctx) => {
       type: 'people',
       count: 9,
       projectId: projectObjs.project1.id,
-      date: new Date(2022, 1, 1, 10, 0)
+      date: new Date(2022, 1, 1, 8, 2)
     },
     {
       eyeId: eyeObjs.eye1.id,
@@ -36,7 +36,7 @@ module.exports = async (prisma, ctx) => {
       type: 'people',
       count: 22,
       projectId: projectObjs.project1.id,
-      date: new Date(2022, 1, 1, 11, 0)
+      date: new Date(2022, 1, 1, 8, 3)
     },
     {
       eyeId: eyeObjs.eye1.id,
@@ -44,7 +44,7 @@ module.exports = async (prisma, ctx) => {
       type: 'people',
       count: 19,
       projectId: projectObjs.project1.id,
-      date: new Date(2022, 1, 1, 12, 0)
+      date: new Date(2022, 1, 1, 8, 4)
     },
 
     {
@@ -61,7 +61,7 @@ module.exports = async (prisma, ctx) => {
       type: 'people',
       count: 11,
       projectId: projectObjs.project1.id,
-      date: new Date(2022, 1, 1, 9, 0)
+      date: new Date(2022, 1, 1, 8, 1)
     },
     {
       eyeId: eyeObjs.eye2.id,
@@ -69,7 +69,7 @@ module.exports = async (prisma, ctx) => {
       type: 'people',
       count: 11,
       projectId: projectObjs.project1.id,
-      date: new Date(2022, 1, 1, 10, 0)
+      date: new Date(2022, 1, 1, 8, 2)
     },
     {
       eyeId: eyeObjs.eye2.id,
@@ -77,7 +77,7 @@ module.exports = async (prisma, ctx) => {
       type: 'people',
       count: 18,
       projectId: projectObjs.project1.id,
-      date: new Date(2022, 1, 1, 11, 0)
+      date: new Date(2022, 1, 1, 8, 3)
     },
     {
       eyeId: eyeObjs.eye1.id,
@@ -85,7 +85,7 @@ module.exports = async (prisma, ctx) => {
       type: 'people',
       count: 21,
       projectId: projectObjs.project1.id,
-      date: new Date(2022, 1, 1, 12, 0)
+      date: new Date(2022, 1, 1, 8, 4)
     },
 
     {
