@@ -46,6 +46,46 @@ module.exports = async (prisma, ctx) => {
       projectId: projectObjs.project1.id,
       date: new Date(2022, 1, 1, 8, 4)
     },
+    {
+      eyeId: eyeObjs.eye1.id,
+      recordId: recordObjs['cam1-202202010805'].id,
+      type: 'people',
+      count: 15,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 5)
+    },
+    {
+      eyeId: eyeObjs.eye1.id,
+      recordId: recordObjs['cam1-202202010806'].id,
+      type: 'people',
+      count: 22,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 6)
+    },
+    {
+      eyeId: eyeObjs.eye1.id,
+      recordId: recordObjs['cam1-202202010807'].id,
+      type: 'people',
+      count: 13,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 7)
+    },
+    {
+      eyeId: eyeObjs.eye1.id,
+      recordId: recordObjs['cam1-202202010808'].id,
+      type: 'people',
+      count: 9,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 8)
+    },
+    {
+      eyeId: eyeObjs.eye1.id,
+      recordId: recordObjs['cam1-202202010809'].id,
+      type: 'people',
+      count: 17,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 9)
+    },
 
     {
       eyeId: eyeObjs.eye2.id,
