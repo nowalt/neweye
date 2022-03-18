@@ -129,9 +129,9 @@ module.exports = async (prisma, ctx) => {
       eyeId: eyeObjs.eye2.id,
       clientId: 'cam2-202202010800',
       data: {
-        faceId: 'fake-face-id-06',
+        faceId: 'fake-cam2-face-id-01',
         boundingBox: { width: 0.31, height: 0.23, left: 0.54, top: 0.89 },
-        imageId: 'fake-image-id-06',
+        imageId: 'fake-cam2-image-id-01',
         confidence: 100
       },
       projectId: projectObjs.project1.id,
@@ -141,9 +141,9 @@ module.exports = async (prisma, ctx) => {
       eyeId: eyeObjs.eye2.id,
       clientId: 'cam2-202202010801',
       data: {
-        faceId: 'fake-face-id-07',
+        faceId: 'fake-cam2-face-id-02',
         boundingBox: { width: 0.13, height: 0.53, left: 0.23, top: 0.11 },
-        imageId: 'fake-image-id-07',
+        imageId: 'fake-cam2-image-id-02',
         confidence: 100
       },
       projectId: projectObjs.project1.id,
@@ -153,9 +153,9 @@ module.exports = async (prisma, ctx) => {
       eyeId: eyeObjs.eye2.id,
       clientId: 'cam2-202202010802',
       data: {
-        faceId: 'fake-face-id-08',
+        faceId: 'fake-cam2-face-id-03',
         boundingBox: { width: 0.62, height: 0.67, left: 0.15, top: 0.77 },
-        imageId: 'fake-image-id-08',
+        imageId: 'fake-cam2-image-id-03',
         confidence: 100
       },
       projectId: projectObjs.project1.id,
@@ -165,9 +165,9 @@ module.exports = async (prisma, ctx) => {
       eyeId: eyeObjs.eye2.id,
       clientId: 'cam2-202202010803',
       data: {
-        faceId: 'fake-face-id-09',
+        faceId: 'fake-cam2-face-id-04',
         boundingBox: { width: 0.63, height: 0.13, left: 0.77, top: 0.24 },
-        imageId: 'fake-image-id-09',
+        imageId: 'fake-cam2-image-id-04',
         confidence: 100
       },
       projectId: projectObjs.project1.id,
@@ -177,13 +177,73 @@ module.exports = async (prisma, ctx) => {
       eyeId: eyeObjs.eye2.id,
       clientId: 'cam2-202202010804',
       data: {
-        faceId: 'fake-face-id-10',
+        faceId: 'fake-cam2-face-id-05',
         boundingBox: { width: 0.57, height: 0.15, left: 0.93, top: 0.15 },
-        imageId: 'fake-image-id-10',
+        imageId: 'fake-cam2-image-id-05',
         confidence: 100
       },
       projectId: projectObjs.project1.id,
       date: new Date(2022, 1, 1, 8, 4)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010805',
+      data: {
+        faceId: 'fake-cam2-face-id-06',
+        boundingBox: { width: 0.31, height: 0.23, left: 0.54, top: 0.89 },
+        imageId: 'fake-cam2-image-id-06',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 5)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010806',
+      data: {
+        faceId: 'fake-cam2-face-id-07',
+        boundingBox: { width: 0.13, height: 0.53, left: 0.23, top: 0.11 },
+        imageId: 'fake-cam2-image-id-07',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 6)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010807',
+      data: {
+        faceId: 'fake-cam2-face-id-08',
+        boundingBox: { width: 0.62, height: 0.67, left: 0.15, top: 0.77 },
+        imageId: 'fake-cam2-image-id-08',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 7)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010808',
+      data: {
+        faceId: 'fake-cam2-face-id-09',
+        boundingBox: { width: 0.63, height: 0.13, left: 0.77, top: 0.24 },
+        imageId: 'fake-cam2-image-id-09',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 8)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010809',
+      data: {
+        faceId: 'fake-cam2-face-id-10',
+        boundingBox: { width: 0.57, height: 0.15, left: 0.93, top: 0.15 },
+        imageId: 'fake-cam2-image-id-10',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 9)
     },
 
     {
