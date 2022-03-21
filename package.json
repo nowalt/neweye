@@ -28,6 +28,8 @@
     "aws-sdk": "^2.1053.0",
     "cookie": "^0.4.1",
     "cookie-session": "^2.0.0",
+    "echarts": "^5.3.1",
+    "echarts-for-react": "^3.0.2",
     "gantt-task-react": "^0.3.7",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
