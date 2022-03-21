@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ReactEcharts from "echarts-for-react";
 import { useRouter } from "next/router";
 import _ from "lodash";
@@ -17,6 +17,7 @@ const Chart = () => {
   const num = router.query.projectNum as string;
 
   const [timeInterval, setTimeInterval]: any = useState();
+  const [buttonSelected, setButtonSelected] = useState(1);
 
   const { project, error: projectError } = useProject({
     num: projectNum,
@@ -28,6 +29,12 @@ const Chart = () => {
     projectId: project?.id,
     timeInterval,
   });
+
+  useEffect(() => {
+    const time = new Date();
+    time.setMinutes(time.getMinutes() - 10);
+    setTimeInterval(time.toISOString());
+  }, []);
 
   if (projectError) {
     return <div>Error: {projectError.info || projectError.message}</div>;
@@ -65,33 +72,48 @@ const Chart = () => {
       <div className="flex items-center justify-center mt-5">
         <button
           type="button"
-          className="mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          className={`${
+            buttonSelected === 1
+              ? "bg-green-600 hover:bg-green-700"
+              : "bg-indigo-600 hover:bg-indigo-700"
+          } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
             const time = new Date();
             time.setMinutes(time.getMinutes() - 10);
             setTimeInterval(time.toISOString());
+            setButtonSelected(1);
           }}
         >
           <span>過去10分鐘</span>
         </button>
         <button
           type="button"
-          className="mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          className={`${
+            buttonSelected === 2
+              ? "bg-green-600 hover:bg-green-700"
+              : "bg-indigo-600 hover:bg-indigo-700"
+          } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
             const time = new Date();
             time.setMinutes(time.getMinutes() - 30);
             setTimeInterval(time.toISOString());
+            setButtonSelected(2);
           }}
         >
           <span>過去30分鐘</span>
         </button>
         <button
           type="button"
-          className="mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+          className={`${
+            buttonSelected === 3
+              ? "bg-green-600 hover:bg-green-700"
+              : "bg-indigo-600 hover:bg-indigo-700"
+          } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
             const time = new Date();
             time.setMinutes(time.getMinutes() - 60);
             setTimeInterval(time.toISOString());
+            setButtonSelected(3);
           }}
         >
           <span>過去1小時</span>

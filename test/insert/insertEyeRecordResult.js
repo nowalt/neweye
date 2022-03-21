@@ -655,7 +655,9 @@ module.exports = async (prisma, ctx) => {
     // }
   ]
 
-  for (let i = 0; i < 20; i++) {
+  const timeInterval = 60
+
+  for (let i = 0; i < timeInterval; i++) {
     const data = {
       eyeId: eyeObjs.eye1.id,
       recordId: recordObjs[`cam1-data-${i + 1}`].id,
