@@ -572,6 +572,86 @@ module.exports = async (prisma, ctx) => {
       count: 18,
       projectId: projectObjs.project3.id,
       date: new Date(2022, 2, 1, 8, 9)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010810'].id,
+      type: 'car',
+      count: 3,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 10)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010811'].id,
+      type: 'car',
+      count: 21,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 11)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010812'].id,
+      type: 'car',
+      count: 16,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 12)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010813'].id,
+      type: 'car',
+      count: 22,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 13)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010814'].id,
+      type: 'car',
+      count: 25,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 14)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010815'].id,
+      type: 'car',
+      count: 21,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 15)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010816'].id,
+      type: 'car',
+      count: 13,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 16)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010817'].id,
+      type: 'car',
+      count: 17,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 17)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010818'].id,
+      type: 'car',
+      count: 17,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 18)
+    },
+    {
+      eyeId: eyeObjs.eye4.id,
+      recordId: recordObjs['cam4-202203010819'].id,
+      type: 'car',
+      count: 29,
+      projectId: projectObjs.project3.id,
+      date: new Date(2022, 2, 1, 8, 19)
     }
   ]
 
