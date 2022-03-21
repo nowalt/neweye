@@ -411,6 +411,86 @@ module.exports = async (prisma, ctx) => {
       projectId: projectObjs.project2.id,
       date: new Date(2022, 2, 1, 8, 9)
     },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010810'].id,
+      type: 'dog',
+      count: 13,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 10)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010811'].id,
+      type: 'dog',
+      count: 5,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 11)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010812'].id,
+      type: 'dog',
+      count: 3,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 12)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010813'].id,
+      type: 'dog',
+      count: 9,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 13)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010814'].id,
+      type: 'dog',
+      count: 11,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 14)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010815'].id,
+      type: 'dog',
+      count: 6,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 15)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010816'].id,
+      type: 'dog',
+      count: 3,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 16)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010817'].id,
+      type: 'dog',
+      count: 7,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 17)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010818'].id,
+      type: 'dog',
+      count: 6,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 18)
+    },
+    {
+      eyeId: eyeObjs.eye3.id,
+      recordId: recordObjs['cam3-202203010819'].id,
+      type: 'dog',
+      count: 1,
+      projectId: projectObjs.project2.id,
+      date: new Date(2022, 2, 1, 8, 19)
+    },
 
     // eye4
     {
