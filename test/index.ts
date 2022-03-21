@@ -29,7 +29,7 @@ async function main() {
   await insertEyes(prisma, ctx);
   await insertEyeRecords(prisma, ctx);
   await insertEyeRecordResult(prisma, ctx);
-  await insertEyeRecordAttachment(prisma, ctx);
+  // await insertEyeRecordAttachment(prisma, ctx);
 }
 
 main()
