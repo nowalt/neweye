@@ -322,7 +322,7 @@ module.exports = async (prisma, ctx) => {
       date: new Date(2022, 1, 1, 8, 18)
     },
     {
-      eyeId: eyeObjs.eye1.id,
+      eyeId: eyeObjs.eye2.id,
       recordId: recordObjs['cam2-202202010819'].id,
       type: 'people',
       count: 21,
