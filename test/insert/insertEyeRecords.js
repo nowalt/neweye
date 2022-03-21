@@ -367,6 +367,126 @@ module.exports = async (prisma, ctx) => {
       projectId: projectObjs.project1.id,
       date: new Date(2022, 1, 1, 8, 9)
     },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010810',
+      data: {
+        faceId: 'fake-cam2-face-id-11',
+        boundingBox: { width: 0.31, height: 0.23, left: 0.54, top: 0.89 },
+        imageId: 'fake-cam2-image-id-11',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 10)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010811',
+      data: {
+        faceId: 'fake-cam2-face-id-12',
+        boundingBox: { width: 0.13, height: 0.53, left: 0.23, top: 0.11 },
+        imageId: 'fake-cam2-image-id-12',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 11)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010812',
+      data: {
+        faceId: 'fake-cam2-face-id-13',
+        boundingBox: { width: 0.62, height: 0.67, left: 0.15, top: 0.77 },
+        imageId: 'fake-cam2-image-id-13',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 12)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010813',
+      data: {
+        faceId: 'fake-cam2-face-id-14',
+        boundingBox: { width: 0.63, height: 0.13, left: 0.77, top: 0.24 },
+        imageId: 'fake-cam2-image-id-14',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 13)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010814',
+      data: {
+        faceId: 'fake-cam2-face-id-15',
+        boundingBox: { width: 0.57, height: 0.15, left: 0.93, top: 0.15 },
+        imageId: 'fake-cam2-image-id-15',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 14)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010815',
+      data: {
+        faceId: 'fake-cam2-face-id-16',
+        boundingBox: { width: 0.31, height: 0.23, left: 0.54, top: 0.89 },
+        imageId: 'fake-cam2-image-id-16',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 15)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010816',
+      data: {
+        faceId: 'fake-cam2-face-id-17',
+        boundingBox: { width: 0.13, height: 0.53, left: 0.23, top: 0.11 },
+        imageId: 'fake-cam2-image-id-17',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 16)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010817',
+      data: {
+        faceId: 'fake-cam2-face-id-18',
+        boundingBox: { width: 0.62, height: 0.67, left: 0.15, top: 0.77 },
+        imageId: 'fake-cam2-image-id-18',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 17)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010818',
+      data: {
+        faceId: 'fake-cam2-face-id-19',
+        boundingBox: { width: 0.63, height: 0.13, left: 0.77, top: 0.24 },
+        imageId: 'fake-cam2-image-id-19',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 18)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      clientId: 'cam2-202202010819',
+      data: {
+        faceId: 'fake-cam2-face-id-20',
+        boundingBox: { width: 0.57, height: 0.15, left: 0.93, top: 0.15 },
+        imageId: 'fake-cam2-image-id-20',
+        confidence: 100
+      },
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 19)
+    },
 
     // eye3
     {

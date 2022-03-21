@@ -202,7 +202,7 @@ module.exports = async (prisma, ctx) => {
       date: new Date(2022, 1, 1, 8, 3)
     },
     {
-      eyeId: eyeObjs.eye1.id,
+      eyeId: eyeObjs.eye2.id,
       recordId: recordObjs['cam2-202202010804'].id,
       type: 'people',
       count: 21,
@@ -242,12 +242,92 @@ module.exports = async (prisma, ctx) => {
       date: new Date(2022, 1, 1, 8, 8)
     },
     {
-      eyeId: eyeObjs.eye1.id,
+      eyeId: eyeObjs.eye2.id,
       recordId: recordObjs['cam2-202202010809'].id,
       type: 'people',
       count: 9,
       projectId: projectObjs.project1.id,
       date: new Date(2022, 1, 1, 8, 9)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010810'].id,
+      type: 'people',
+      count: 15,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 10)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010811'].id,
+      type: 'people',
+      count: 21,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 11)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010812'].id,
+      type: 'people',
+      count: 13,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 12)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010813'].id,
+      type: 'people',
+      count: 15,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 13)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010814'].id,
+      type: 'people',
+      count: 3,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 14)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010815'].id,
+      type: 'people',
+      count: 25,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 15)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010816'].id,
+      type: 'people',
+      count: 13,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 16)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010817'].id,
+      type: 'people',
+      count: 17,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 17)
+    },
+    {
+      eyeId: eyeObjs.eye2.id,
+      recordId: recordObjs['cam2-202202010818'].id,
+      type: 'people',
+      count: 23,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 18)
+    },
+    {
+      eyeId: eyeObjs.eye1.id,
+      recordId: recordObjs['cam2-202202010819'].id,
+      type: 'people',
+      count: 21,
+      projectId: projectObjs.project1.id,
+      date: new Date(2022, 1, 1, 8, 19)
     },
 
     // eye3
