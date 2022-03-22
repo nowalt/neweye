@@ -213,39 +213,6 @@ export function useEye({
   };
 }
 
-export function useEyeWithReocrdResults({
-  num = "",
-  projectId = "",
-  timeInterval,
-}: { num?: string; projectId?: string; timeInterval?: string } = {}) {
-  const { data, error } = useSWR(
-    num && projectId
-      ? `/api/eye/record_results?projectId=${projectId}&num=${num}` +
-          `${timeInterval ? `&timeInterval=${timeInterval}` : ""}`
-      : null,
-    fetcher
-  );
-
-  const [eye, setEye] = useState(data?.eye);
-  useEffect(() => {
-    if (data?.eye) {
-      setEye(data?.eye);
-    }
-  }, [data]);
-
-  if (error) {
-    return {
-      eye: null,
-      error: error.info || error.message,
-    };
-  }
-
-  return {
-    eye,
-    error: null,
-  };
-}
-
 export function useEyeReocrdResultCount({
   teamSlug = "",
   eyeNum = "",
