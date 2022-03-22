@@ -245,3 +245,39 @@ export function useEyeWithReocrdResults({
     error: null,
   };
 }
+
+export function useEyeReocrdResultCount({
+  teamSlug = "",
+  eyeNum = "",
+  projectNum = "",
+  timeInterval = "10",
+}: {
+  teamSlug?: string;
+  eyeNum?: string;
+  projectNum?: string;
+  timeInterval?: string;
+} = {}) {
+  const { data, error } = useSWR(
+    `/api/eye_record_result/count?teamSlug=${teamSlug}&projectNum=${projectNum}&eyeNum=${eyeNum}&timeInterval=${timeInterval}`,
+    fetcher
+  );
+
+  const [result, setResult] = useState(data);
+  useEffect(() => {
+    if (data) {
+      setResult(data);
+    }
+  }, [data]);
+
+  if (error) {
+    return {
+      data: null,
+      error: error.info || error.message,
+    };
+  }
+
+  return {
+    data: result,
+    error: null,
+  };
+}

@@ -6,7 +6,8 @@ import moment from "moment";
 
 import {
   useProject,
-  useEyeWithReocrdResults,
+  useEye,
+  useEyeReocrdResultCount,
 } from "../../../../../../client/lib/hooks";
 
 const Chart = () => {
@@ -14,9 +15,9 @@ const Chart = () => {
 
   const slug = router.query.teamSlug as string;
   const projectNum = router.query.projectNum as string;
-  const num = router.query.projectNum as string;
+  const eyeNum = router.query.eyeNum as string;
 
-  const [timeInterval, setTimeInterval]: any = useState();
+  const [timeInterval, setTimeInterval]: any = useState(10);
   const [buttonSelected, setButtonSelected] = useState(1);
 
   const { project, error: projectError } = useProject({
@@ -24,10 +25,16 @@ const Chart = () => {
     teamSlug: slug,
   });
 
-  const { eye, error: eyeError } = useEyeWithReocrdResults({
-    num,
+  const { eye, error: eyeError } = useEye({
+    num: eyeNum,
     projectId: project?.id,
-    timeInterval,
+  });
+
+  const { data: countData, error: countError } = useEyeReocrdResultCount({
+    teamSlug: slug,
+    eyeNum,
+    projectNum,
+    timeInterval: timeInterval.toString(),
   });
 
   useEffect(() => {
@@ -44,7 +51,13 @@ const Chart = () => {
     return <div>Error: {eyeError.info || eyeError.message}</div>;
   }
 
-  const recordResults = eye?.recordResults || [];
+  if (countError) {
+    return <div>Error: {countError.info || countError.message}</div>;
+  }
+
+  countError;
+
+  const data = countData?.data || [];
 
   const option = {
     title: {
@@ -52,7 +65,7 @@ const Chart = () => {
     },
     xAxis: {
       name: "time",
-      data: recordResults.map((doc: any) => moment(doc.date).format("HH:mm")),
+      data: data.map((doc: any) => moment(doc.timeKey).format("HH:mm")),
       axisTick: {
         show: false,
       },
@@ -62,7 +75,7 @@ const Chart = () => {
     },
     series: [
       {
-        data: recordResults.map((doc: any) => doc.count),
+        data: data.map((doc: any) => doc.sum),
         type: "line",
       },
     ],
@@ -78,9 +91,7 @@ const Chart = () => {
               : "bg-indigo-600 hover:bg-indigo-700"
           } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
-            const time = new Date();
-            time.setMinutes(time.getMinutes() - 10);
-            setTimeInterval(time.toISOString());
+            setTimeInterval(10);
             setButtonSelected(1);
           }}
         >
@@ -94,9 +105,7 @@ const Chart = () => {
               : "bg-indigo-600 hover:bg-indigo-700"
           } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
-            const time = new Date();
-            time.setMinutes(time.getMinutes() - 30);
-            setTimeInterval(time.toISOString());
+            setTimeInterval(30);
             setButtonSelected(2);
           }}
         >
@@ -110,16 +119,14 @@ const Chart = () => {
               : "bg-indigo-600 hover:bg-indigo-700"
           } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
-            const time = new Date();
-            time.setMinutes(time.getMinutes() - 60);
-            setTimeInterval(time.toISOString());
+            setTimeInterval(60);
             setButtonSelected(3);
           }}
         >
           <span>過去1小時</span>
         </button>
       </div>
-      {recordResults && recordResults.length > 0 ? (
+      {data && data.length > 0 ? (
         <ReactEcharts option={option} />
       ) : (
         <div className="flex justify-center my-5">
