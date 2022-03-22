@@ -53,6 +53,8 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
       EyeRecordResult 
     WHERE 
       projectId = ${project.id}  
+    AND
+      action = ${action}
     GROUP BY 
       timeKey
   `;
