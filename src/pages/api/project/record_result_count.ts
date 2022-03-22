@@ -14,6 +14,8 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const teamSlug = req.query.teamSlug as string;
   const projectNum = parseInt(req.query.projectNum as string);
   const timeInterval = parseInt(req.query.timeInterval as string); // minute
+  const startDate = req.query.startDate as string;
+  const endDate = req.query.endDate as string;
   const action = req.query.action as string;
 
   if (!projectNum) {
@@ -51,15 +53,13 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
       FROM_UNIXTIME( FLOOR(UNIX_TIMESTAMP(date) / ${groupInterval.toString()}) * ${groupInterval.toString()} ) as timeKey
     FROM 
       EyeRecordResult 
-    WHERE 
-      projectId = ${project.id}  
-    AND
-      action = ${action}
+    WHERE projectId = ${project.id}  
+    AND action = ${action}
+    AND date >= ${startDate}
+    AND date <= ${endDate}
     GROUP BY 
       timeKey
   `;
-
-  console.log(data);
 
   if (data) {
     return res.status(200).json({ data });

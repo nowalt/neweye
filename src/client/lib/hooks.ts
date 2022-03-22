@@ -261,18 +261,24 @@ export function useProjectReocrdResultCount({
   projectNum = "",
   timeInterval = "10",
   action = "",
+  startDate = "",
+  endDate = "",
 }: {
   teamSlug?: string;
   projectNum?: string;
   timeInterval?: string;
   action?: string;
+  startDate?: string;
+  endDate?: string;
 } = {}) {
   const { data, error } = useSWR(
     "/api/project/record_result_count" +
       `?teamSlug=${teamSlug}` +
       `&projectNum=${projectNum}` +
       `&timeInterval=${timeInterval}` +
-      `&action=${action}`,
+      `&action=${action}` +
+      `&startDate=${startDate}` +
+      `&endDate=${endDate}`,
     fetcher
   );
 

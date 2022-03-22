@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import ReactEcharts from "echarts-for-react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import _ from "lodash";
 import moment from "moment";
@@ -19,6 +18,13 @@ const Chart = () => {
   const [timeInterval, setTimeInterval] = useState(10);
   const [buttonSelected, setButtonSelected] = useState(1);
 
+  const currentTime = new Date();
+  const [endDate, setEndDate] = useState(currentTime);
+
+  const initStartTime = new Date();
+  initStartTime.setMinutes(initStartTime.getMinutes() - 10);
+  const [startDate, setStartDate] = useState(initStartTime);
+
   const { project, error: projectError } = useProject({
     num: projectNum,
     teamSlug: slug,
@@ -30,6 +36,8 @@ const Chart = () => {
       projectNum,
       timeInterval: timeInterval.toString(),
       action: "in",
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
     });
 
   const { data: countOutData, error: countOutError } =
@@ -38,6 +46,8 @@ const Chart = () => {
       projectNum,
       timeInterval: timeInterval.toString(),
       action: "out",
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
     });
 
   if (projectError) {
@@ -68,6 +78,10 @@ const Chart = () => {
           onClick={() => {
             setTimeInterval(10);
             setButtonSelected(1);
+
+            const startTime = new Date();
+            startTime.setMinutes(startTime.getMinutes() - 10);
+            setStartDate(startTime);
           }}
         >
           <span>過去10分鐘</span>
@@ -82,6 +96,10 @@ const Chart = () => {
           onClick={() => {
             setTimeInterval(30);
             setButtonSelected(2);
+
+            const startTime = new Date();
+            startTime.setMinutes(startTime.getMinutes() - 30);
+            setStartDate(startTime);
           }}
         >
           <span>過去30分鐘</span>
@@ -96,6 +114,10 @@ const Chart = () => {
           onClick={() => {
             setTimeInterval(60);
             setButtonSelected(3);
+
+            const startTime = new Date();
+            startTime.setMinutes(startTime.getMinutes() - 60);
+            setStartDate(startTime);
           }}
         >
           <span>過去1小時</span>
