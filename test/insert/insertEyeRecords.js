@@ -21,7 +21,7 @@ module.exports = async (prisma, ctx) => {
         imageId: `fake-cam1-image-id-${i + 1}`,
         confidence: 100
       },
-      projectId: projectObjs.project3.id,
+      projectId: projectObjs.project1.id,
       date: time2
     }
     eyeRecords.push(data)
@@ -35,7 +35,7 @@ module.exports = async (prisma, ctx) => {
         imageId: `fake-cam1-image-id-${i + 1}`,
         confidence: 100
       },
-      projectId: projectObjs.project3.id,
+      projectId: projectObjs.project1.id,
       date: time2
     }
     eyeRecords.push(data2)

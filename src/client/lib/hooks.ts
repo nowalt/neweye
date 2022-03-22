@@ -255,3 +255,43 @@ export function useEyeReocrdResultCount({
     error: null,
   };
 }
+
+export function useProjectReocrdResultCount({
+  teamSlug = "",
+  projectNum = "",
+  timeInterval = "10",
+  action = "",
+}: {
+  teamSlug?: string;
+  projectNum?: string;
+  timeInterval?: string;
+  action?: string;
+} = {}) {
+  const { data, error } = useSWR(
+    "/api/project/record_result_count" +
+      `?teamSlug=${teamSlug}` +
+      `&projectNum=${projectNum}` +
+      `&timeInterval=${timeInterval}` +
+      `&action=${action}`,
+    fetcher
+  );
+
+  const [result, setResult] = useState(data);
+  useEffect(() => {
+    if (data) {
+      setResult(data);
+    }
+  }, [data]);
+
+  if (error) {
+    return {
+      data: null,
+      error: error.info || error.message,
+    };
+  }
+
+  return {
+    data: result,
+    error: null,
+  };
+}

@@ -7,9 +7,9 @@ import moment from "moment";
 import {
   useProject,
   useEye,
-  useEyeReocrdResultCount,
-} from "../../../../../../client/lib/hooks";
-import RecordLineChart from "../../../../../../client/components/RecordLineChart";
+  useProjectReocrdResultCount,
+} from "../../../../client/lib/hooks";
+import RecordLineChart from "../../../../client/components/RecordLineChart";
 
 const Chart = () => {
   const router = useRouter();
@@ -18,7 +18,7 @@ const Chart = () => {
   const projectNum = router.query.projectNum as string;
   const eyeNum = router.query.eyeNum as string;
 
-  const [timeInterval, setTimeInterval]: any = useState(10);
+  const [timeInterval, setTimeInterval] = useState(10);
   const [buttonSelected, setButtonSelected] = useState(1);
 
   const { project, error: projectError } = useProject({
@@ -26,33 +26,24 @@ const Chart = () => {
     teamSlug: slug,
   });
 
-  const { eye, error: eyeError } = useEye({
-    num: eyeNum,
-    projectId: project?.id,
-  });
+  const { data: countInData, error: countInError } =
+    useProjectReocrdResultCount({
+      teamSlug: slug,
+      projectNum,
+      timeInterval: timeInterval.toString(),
+      action: "in",
+    });
 
-  const { data: countInData, error: countInError } = useEyeReocrdResultCount({
-    teamSlug: slug,
-    eyeNum,
-    projectNum,
-    timeInterval: timeInterval.toString(),
-    action: "in",
-  });
-
-  const { data: countOutData, error: countOutError } = useEyeReocrdResultCount({
-    teamSlug: slug,
-    eyeNum,
-    projectNum,
-    timeInterval: timeInterval.toString(),
-    action: "out",
-  });
+  const { data: countOutData, error: countOutError } =
+    useProjectReocrdResultCount({
+      teamSlug: slug,
+      projectNum,
+      timeInterval: timeInterval.toString(),
+      action: "out",
+    });
 
   if (projectError) {
     return <div>Error: {projectError.info || projectError.message}</div>;
-  }
-
-  if (eyeError) {
-    return <div>Error: {eyeError.info || eyeError.message}</div>;
   }
 
   if (countInError) {
@@ -115,9 +106,7 @@ const Chart = () => {
 
       <div className="mt-5">
         <RecordLineChart
-          title={`${project?.name || "loading..."}, ${
-            eye?.name || "loading..."
-          }, 入場人數`}
+          title={`${project?.name || "loading..."}, 入場人數`}
           xAxisData={inData.map((doc: any) =>
             moment(doc.timeKey).format("HH:mm")
           )}
@@ -125,9 +114,7 @@ const Chart = () => {
         />
 
         <RecordLineChart
-          title={`${project?.name || "loading..."}, ${
-            eye?.name || "loading..."
-          }, 離場人數`}
+          title={`${project?.name || "loading..."}, 離場人數`}
           xAxisData={outData.map((doc: any) =>
             moment(doc.timeKey).format("HH:mm")
           )}
