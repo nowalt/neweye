@@ -6,7 +6,6 @@ import moment from "moment";
 
 import {
   useProject,
-  useEye,
   useProjectReocrdResultCount,
 } from "../../../../client/lib/hooks";
 import RecordLineChart from "../../../../client/components/RecordLineChart";
@@ -16,7 +15,6 @@ const Chart = () => {
 
   const slug = router.query.teamSlug as string;
   const projectNum = router.query.projectNum as string;
-  const eyeNum = router.query.eyeNum as string;
 
   const [timeInterval, setTimeInterval] = useState(10);
   const [buttonSelected, setButtonSelected] = useState(1);
