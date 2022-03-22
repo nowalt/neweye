@@ -15,6 +15,7 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const projectNum = parseInt(req.query.projectNum as string);
   const eyeNum = parseInt(req.query.eyeNum as string);
   const timeInterval = parseInt(req.query.timeInterval as string); // minute
+  const action = req.query.action as string;
 
   if (!projectNum || !eyeNum) {
     return res.status(200).json({ data: [] });
@@ -54,7 +55,9 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
     FROM 
       EyeRecordResult 
     WHERE 
-      eyeId = ${eye.id}      
+      eyeId = ${eye.id}  
+    AND
+      action = ${action}    
     GROUP BY 
       timeKey
   `;

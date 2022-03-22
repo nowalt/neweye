@@ -9,6 +9,7 @@ import {
   useEye,
   useEyeReocrdResultCount,
 } from "../../../../../../client/lib/hooks";
+import RecordLineChart from "../../../../../../client/components/RecordLineChart";
 
 const Chart = () => {
   const router = useRouter();
@@ -30,11 +31,20 @@ const Chart = () => {
     projectId: project?.id,
   });
 
-  const { data: countData, error: countError } = useEyeReocrdResultCount({
+  const { data: countInData, error: countInError } = useEyeReocrdResultCount({
     teamSlug: slug,
     eyeNum,
     projectNum,
     timeInterval: timeInterval.toString(),
+    action: "in",
+  });
+
+  const { data: countOutData, error: countOutError } = useEyeReocrdResultCount({
+    teamSlug: slug,
+    eyeNum,
+    projectNum,
+    timeInterval: timeInterval.toString(),
+    action: "out",
   });
 
   useEffect(() => {
@@ -51,35 +61,17 @@ const Chart = () => {
     return <div>Error: {eyeError.info || eyeError.message}</div>;
   }
 
-  if (countError) {
-    return <div>Error: {countError.info || countError.message}</div>;
+  if (countInError) {
+    return <div>Error: {countInError.info || countInError.message}</div>;
   }
 
-  countError;
+  if (countOutError) {
+    return <div>Error: {countOutError.info || countOutError.message}</div>;
+  }
 
-  const data = countData?.data || [];
+  const inData = countInData?.data || [];
+  const outData = countOutData?.data || [];
 
-  const option = {
-    title: {
-      text: `${project?.name || "loading..."}, ${eye?.name || "loading..."}`,
-    },
-    xAxis: {
-      name: "time",
-      data: data.map((doc: any) => moment(doc.timeKey).format("HH:mm")),
-      axisTick: {
-        show: false,
-      },
-    },
-    yAxis: {
-      name: "count",
-    },
-    series: [
-      {
-        data: data.map((doc: any) => doc.sum),
-        type: "line",
-      },
-    ],
-  };
   return (
     <div>
       <div className="flex items-center justify-center mt-5">
@@ -126,13 +118,28 @@ const Chart = () => {
           <span>過去1小時</span>
         </button>
       </div>
-      {data && data.length > 0 ? (
-        <ReactEcharts option={option} />
-      ) : (
-        <div className="flex justify-center my-5">
-          <span>無資料</span>
-        </div>
-      )}
+
+      <div className="mt-5">
+        <RecordLineChart
+          title={`${project?.name || "loading..."}, ${
+            eye?.name || "loading..."
+          }, 入場人數`}
+          xAxisData={inData.map((doc: any) =>
+            moment(doc.timeKey).format("HH:mm")
+          )}
+          yAxisData={inData.map((doc: any) => doc.sum)}
+        />
+
+        <RecordLineChart
+          title={`${project?.name || "loading..."}, ${
+            eye?.name || "loading..."
+          }, 離場人數`}
+          xAxisData={outData.map((doc: any) =>
+            moment(doc.timeKey).format("HH:mm")
+          )}
+          yAxisData={outData.map((doc: any) => doc.sum)}
+        />
+      </div>
     </div>
   );
 };

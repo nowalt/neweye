@@ -218,14 +218,21 @@ export function useEyeReocrdResultCount({
   eyeNum = "",
   projectNum = "",
   timeInterval = "10",
+  action = "",
 }: {
   teamSlug?: string;
   eyeNum?: string;
   projectNum?: string;
   timeInterval?: string;
+  action?: string;
 } = {}) {
   const { data, error } = useSWR(
-    `/api/eye_record_result/count?teamSlug=${teamSlug}&projectNum=${projectNum}&eyeNum=${eyeNum}&timeInterval=${timeInterval}`,
+    "/api/eye/record_result_count" +
+      `?teamSlug=${teamSlug}` +
+      `&projectNum=${projectNum}` +
+      `&eyeNum=${eyeNum}` +
+      `&timeInterval=${timeInterval}` +
+      `&action=${action}`,
     fetcher
   );
 
