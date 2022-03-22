@@ -660,6 +660,7 @@ module.exports = async (prisma, ctx) => {
   for (let i = 0; i < timeInterval; i++) {
     const data = {
       eyeId: eyeObjs.eye1.id,
+      action: 'in',
       recordId: recordObjs[`cam1-data-${i + 1}`].id,
       type: 'person',
       count: parseInt(Math.random() * 30),
