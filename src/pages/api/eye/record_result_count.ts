@@ -14,8 +14,9 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const teamSlug = req.query.teamSlug as string;
   const projectNum = parseInt(req.query.projectNum as string);
   const eyeNum = parseInt(req.query.eyeNum as string);
-  const timeInterval = parseInt(req.query.timeInterval as string); // minute
   const action = req.query.action as string;
+  const startDate = req.query.startDate as string;
+  const endDate = req.query.endDate as string;
 
   if (!projectNum || !eyeNum) {
     return res.status(200).json({ data: [] });
@@ -34,17 +35,17 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
     return res.status(500).json({ error: "找不到資料" });
   }
 
+  const startTime: any = new Date(startDate);
+  const endTime: any = new Date(endDate);
+  const timeDiff = endTime - startTime;
+
   let groupInterval = 60;
-  switch (timeInterval) {
-    case 10:
-      groupInterval = 60;
-      break;
-    case 30:
-      groupInterval = 5 * 60;
-      break;
-    case 60:
-      groupInterval = 10 * 60;
-      break;
+  if (timeDiff >= 60 * 60 * 1000) {
+    // 1hr 以上，間隔10min
+    groupInterval = 10 * 60;
+  } else if (timeDiff >= 30 * 60 * 1000) {
+    // 30min 以上，間隔5min
+    groupInterval = 5 * 60;
   }
 
   const data = await prisma.$queryRaw`
@@ -54,10 +55,10 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
       FROM_UNIXTIME( FLOOR(UNIX_TIMESTAMP(date) / ${groupInterval.toString()}) * ${groupInterval.toString()} ) as timeKey
     FROM 
       EyeRecordResult 
-    WHERE 
-      eyeId = ${eye.id}  
-    AND
-      action = ${action}    
+    WHERE eyeId = ${eye.id}  
+    AND action = ${action}
+    AND date >= ${startDate}
+    AND date <= ${endDate}    
     GROUP BY 
       timeKey
   `;
