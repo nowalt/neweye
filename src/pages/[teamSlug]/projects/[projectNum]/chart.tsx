@@ -15,7 +15,6 @@ const Chart = () => {
   const slug = router.query.teamSlug as string;
   const projectNum = router.query.projectNum as string;
 
-  const [timeInterval, setTimeInterval] = useState(10);
   const [buttonSelected, setButtonSelected] = useState(1);
 
   const currentTime = new Date();
@@ -34,7 +33,6 @@ const Chart = () => {
     useProjectReocrdResultCount({
       teamSlug: slug,
       projectNum,
-      timeInterval: timeInterval.toString(),
       action: "in",
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
@@ -44,7 +42,6 @@ const Chart = () => {
     useProjectReocrdResultCount({
       teamSlug: slug,
       projectNum,
-      timeInterval: timeInterval.toString(),
       action: "out",
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
@@ -76,12 +73,12 @@ const Chart = () => {
               : "bg-indigo-600 hover:bg-indigo-700"
           } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
-            setTimeInterval(10);
             setButtonSelected(1);
 
-            const startTime = new Date();
+            const startTime = new Date(currentTime);
             startTime.setMinutes(startTime.getMinutes() - 10);
             setStartDate(startTime);
+            setEndDate(currentTime);
           }}
         >
           <span>過去10分鐘</span>
@@ -94,12 +91,12 @@ const Chart = () => {
               : "bg-indigo-600 hover:bg-indigo-700"
           } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
-            setTimeInterval(30);
             setButtonSelected(2);
 
-            const startTime = new Date();
+            const startTime = new Date(currentTime);
             startTime.setMinutes(startTime.getMinutes() - 30);
             setStartDate(startTime);
+            setEndDate(currentTime);
           }}
         >
           <span>過去30分鐘</span>
@@ -112,12 +109,12 @@ const Chart = () => {
               : "bg-indigo-600 hover:bg-indigo-700"
           } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
           onClick={() => {
-            setTimeInterval(60);
             setButtonSelected(3);
 
-            const startTime = new Date();
+            const startTime = new Date(currentTime);
             startTime.setMinutes(startTime.getMinutes() - 60);
             setStartDate(startTime);
+            setEndDate(currentTime);
           }}
         >
           <span>過去1小時</span>

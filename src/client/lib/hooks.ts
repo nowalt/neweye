@@ -262,14 +262,12 @@ export function useEyeReocrdResultCount({
 export function useProjectReocrdResultCount({
   teamSlug = "",
   projectNum = "",
-  timeInterval = "10",
   action = "",
   startDate = "",
   endDate = "",
 }: {
   teamSlug?: string;
   projectNum?: string;
-  timeInterval?: string;
   action?: string;
   startDate?: string;
   endDate?: string;
@@ -278,7 +276,6 @@ export function useProjectReocrdResultCount({
     "/api/project/record_result_count" +
       `?teamSlug=${teamSlug}` +
       `&projectNum=${projectNum}` +
-      `&timeInterval=${timeInterval}` +
       `&action=${action}` +
       `&startDate=${startDate}` +
       `&endDate=${endDate}`,
