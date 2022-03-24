@@ -1,8 +1,6 @@
 const _ = require('lodash')
 
 module.exports = async (prisma, ctx) => {
-  const eyeObjs = ctx.eyes.obj
-
   const eyeRecordResults = []
 
   const records = ctx.eyeRecords.docs
