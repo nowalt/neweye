@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/router";
 import _ from "lodash";
 import moment from "moment";
+import DatePicker from "react-datepicker";
 
 import {
   useProject,
@@ -23,6 +24,9 @@ const Chart = () => {
   const initStartTime = new Date();
   initStartTime.setMinutes(initStartTime.getMinutes() - 10);
   const [startDate, setStartDate] = useState(initStartTime);
+
+  const [pickerStart, setPickerStart] = useState(initStartTime);
+  const [pickerEnd, setPickerEnd] = useState(currentTime);
 
   const { project, error: projectError } = useProject({
     num: projectNum,
@@ -65,60 +69,141 @@ const Chart = () => {
   return (
     <div>
       <div className="flex items-center justify-center mt-5">
-        <button
-          type="button"
-          className={`${
-            buttonSelected === 1
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-indigo-600 hover:bg-indigo-700"
-          } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
-          onClick={() => {
-            setButtonSelected(1);
+        <label className="mx-3 inline-flex items-center cursor-pointer">
+          <input
+            type="radio"
+            className="form-radio cursor-pointer"
+            name="radio-10min"
+            value={1}
+            checked={buttonSelected === 1}
+            onChange={(e) => {
+              setButtonSelected(1);
 
-            const startTime = new Date(currentTime);
-            startTime.setMinutes(startTime.getMinutes() - 10);
-            setStartDate(startTime);
-            setEndDate(currentTime);
-          }}
-        >
-          <span>過去10分鐘</span>
-        </button>
-        <button
-          type="button"
-          className={`${
-            buttonSelected === 2
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-indigo-600 hover:bg-indigo-700"
-          } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
-          onClick={() => {
-            setButtonSelected(2);
+              const startTime = new Date(currentTime);
+              startTime.setMinutes(startTime.getMinutes() - 10);
+              setStartDate(startTime);
+              setEndDate(currentTime);
+            }}
+          />
+          <span className="ml-1">過去10分鐘</span>
+        </label>
 
-            const startTime = new Date(currentTime);
-            startTime.setMinutes(startTime.getMinutes() - 30);
-            setStartDate(startTime);
-            setEndDate(currentTime);
-          }}
-        >
-          <span>過去30分鐘</span>
-        </button>
-        <button
-          type="button"
-          className={`${
-            buttonSelected === 3
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-indigo-600 hover:bg-indigo-700"
-          } mx-3 only:flex justify-center py-1 px-2 border border-transparent rounded-md shadow-sm font-medium text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50`}
-          onClick={() => {
-            setButtonSelected(3);
+        <label className="mx-3 inline-flex items-center cursor-pointer">
+          <input
+            type="radio"
+            className="form-radio cursor-pointer"
+            name="radio-10min"
+            value={1}
+            checked={buttonSelected === 2}
+            onChange={(e) => {
+              setButtonSelected(2);
 
-            const startTime = new Date(currentTime);
-            startTime.setMinutes(startTime.getMinutes() - 60);
-            setStartDate(startTime);
-            setEndDate(currentTime);
-          }}
-        >
-          <span>過去1小時</span>
-        </button>
+              const startTime = new Date(currentTime);
+              startTime.setMinutes(startTime.getMinutes() - 30);
+              setStartDate(startTime);
+              setEndDate(currentTime);
+            }}
+          />
+          <span className="ml-1">過去30分鐘</span>
+        </label>
+
+        <label className="mx-3 inline-flex items-center cursor-pointer">
+          <input
+            type="radio"
+            className="form-radio cursor-pointer"
+            name="radio-10min"
+            value={1}
+            checked={buttonSelected === 3}
+            onChange={(e) => {
+              setButtonSelected(3);
+
+              const startTime = new Date(currentTime);
+              startTime.setMinutes(startTime.getMinutes() - 60);
+              setStartDate(startTime);
+              setEndDate(currentTime);
+            }}
+          />
+          <span className="ml-1">過去1小時</span>
+        </label>
+      </div>
+
+      <div className="flex items-center justify-center mt-5">
+        <label className="mx-3 inline-flex items-center cursor-pointer">
+          <input
+            type="radio"
+            className="form-radio cursor-pointer"
+            name="radio-custom"
+            value={4}
+            checked={buttonSelected === 4}
+            onChange={(e) => {
+              setButtonSelected(4);
+
+              setStartDate(pickerStart);
+              setEndDate(pickerEnd);
+            }}
+          />
+
+          <span className="ml-1">自訂時間：</span>
+          <div className="flex items-center justify-center mx-3">
+            <span
+              className={`${
+                buttonSelected === 4 ? "text-gray-800" : "text-gray-300"
+              }`}
+            >
+              from
+            </span>
+            <DatePicker
+              id="startAt"
+              className={`h-4 w-36 rounded-sm text-center py-3 px-1 ml-1 text-sm ${
+                buttonSelected === 4
+                  ? "cursor-pointer text-blue-800 border-gray-800 font-medium"
+                  : "text-gray-300 border-gray-500"
+              }`}
+              dateFormat="yyyy-MM-dd HH:mm"
+              disabled={buttonSelected !== 4}
+              selected={pickerStart}
+              onChange={(date: Date) => {
+                date.setSeconds(0);
+                date.setMilliseconds(0);
+                setPickerStart(date);
+                setStartDate(date);
+              }}
+              timeIntervals={30}
+              showTimeSelect
+              withPortal
+            />
+          </div>
+
+          <div className="flex items-center justify-center mx-3">
+            <span
+              className={`${
+                buttonSelected === 4 ? "text-gray-800" : "text-gray-300"
+              }`}
+            >
+              to
+            </span>
+            <DatePicker
+              id="endtAt"
+              className={`h-4 w-36 rounded-sm text-center py-3 px-1 mx-2 text-sm ${
+                buttonSelected === 4
+                  ? "cursor-pointer text-blue-800 border-gray-800 font-medium"
+                  : "text-gray-300 border-gray-500"
+              }`}
+              dateFormat="yyyy-MM-dd HH:mm"
+              disabled={buttonSelected !== 4}
+              selected={pickerEnd}
+              onChange={(date: Date) => {
+                date.setSeconds(59);
+                date.setMilliseconds(999);
+                setPickerEnd(date);
+                setEndDate(date);
+              }}
+              timeIntervals={30}
+              showTimeSelect
+              withPortal
+            />
+          </div>
+        </label>
       </div>
 
       <div className="mt-5">
