@@ -30,9 +30,10 @@ module.exports = async (prisma, ctx) => {
 
   ]
 
-  const docs = await prisma.$transaction(
-    eyes.map((eye) => prisma.eye.create({ data: eye }))
-  )
+  await prisma.eye.createMany({
+    data: eyes
+  })
+  const docs = await prisma.eye.findMany({})
 
   ctx.eyes = {
     docs,

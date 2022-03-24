@@ -37,9 +37,10 @@ module.exports = async (prisma, ctx) => {
     }
   ]
 
-  const docs = await prisma.$transaction(
-    eyeRecordAttachments.map((attachment) => prisma.eyeRecordAttachment.create({ data: attachment }))
-  )
+  await prisma.eyeRecordAttachment.createMany({
+    data: eyeRecordAttachments
+  })
+  const docs = await prisma.eyeRecordAttachment.findMany({})
 
   ctx.eyeRecordAttachments = {
     docs,
