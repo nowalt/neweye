@@ -11,7 +11,7 @@ module.exports = async (prisma, ctx) => {
     const record = records[i]
 
     const data = {
-      eyeId: eyeObjs.eye1.id,
+      eyeId: record.eyeId,
       action: 'in',
       recordId: record.id,
       type: 'person',
@@ -22,7 +22,7 @@ module.exports = async (prisma, ctx) => {
     eyeRecordResults.push(data)
 
     const data2 = {
-      eyeId: eyeObjs.eye1.id,
+      eyeId: record.eyeId,
       action: 'out',
       recordId: record.id,
       type: 'person',
