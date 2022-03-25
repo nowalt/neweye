@@ -40,6 +40,10 @@ const Chart = ({
       axisTick: {
         show: false,
       },
+      axisLabel: {
+        interval: 0,
+        rotate: -30,
+      },
     },
     yAxis: {
       name: "count",

@@ -237,7 +237,7 @@ const Chart = () => {
             eye?.name || "loading..."
           }, 入場人數`}
           xAxisData={inData.map((doc: any) =>
-            moment(doc.timeKey).format("HH:mm")
+            moment(doc.timeKey).format(timeFormat)
           )}
           yAxisData={inData.map((doc: any) => doc.sum)}
         />
@@ -247,7 +247,7 @@ const Chart = () => {
             eye?.name || "loading..."
           }, 離場人數`}
           xAxisData={outData.map((doc: any) =>
-            moment(doc.timeKey).format("HH:mm")
+            moment(doc.timeKey).format(timeFormat)
           )}
           yAxisData={outData.map((doc: any) => doc.sum)}
         />
