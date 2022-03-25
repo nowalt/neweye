@@ -13,6 +13,13 @@ const Chart = ({
     title: {
       text: title,
     },
+    tooltip: {
+      trigger: "axis",
+      formatter: (params: any) => {
+        const value = params[0].value;
+        return `<div className="tooltip">${value}</div>`;
+      },
+    },
     xAxis: {
       name: "time",
       data: xAxisData,
