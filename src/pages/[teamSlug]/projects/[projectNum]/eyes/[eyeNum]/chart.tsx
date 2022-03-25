@@ -204,8 +204,8 @@ const Chart = () => {
               disabled={buttonSelected !== 4}
               selected={pickerEnd}
               onChange={(date: Date) => {
-                date.setSeconds(59);
-                date.setMilliseconds(999);
+                date.setSeconds(0);
+                date.setMilliseconds(0);
                 setPickerEnd(date);
                 setEndDate(date);
               }}

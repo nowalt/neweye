@@ -40,13 +40,16 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const timeDiff = endTime - startTime;
 
   let groupInterval = 60;
-  if (timeDiff >= 60 * 60 * 1000) {
-    // 1hr 以上，間隔10min
+  if (timeDiff >= 2 * 60 * 60 * 1000) {
+    // 2hr 以上，間隔10min
     groupInterval = 10 * 60;
   } else if (timeDiff >= 30 * 60 * 1000) {
     // 30min 以上，間隔5min
     groupInterval = 5 * 60;
   }
+
+  // 多取一個時間區間
+  const endTime2 = new Date(endTime.getTime() + groupInterval * 1000);
 
   const data = await prisma.$queryRaw`
     SELECT
@@ -57,8 +60,8 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
       EyeRecordResult 
     WHERE eyeId = ${eye.id}  
     AND action = ${action}
-    AND date >= ${startDate}
-    AND date <= ${endDate}    
+    AND date >= ${startTime}
+    AND date < ${endTime2}    
     GROUP BY 
       timeKey
   `;
