@@ -31,9 +31,10 @@ module.exports = async (prisma, ctx) => {
     }
   ]
 
-  const docs = await prisma.$transaction(
-    teams.map((team) => prisma.team.create({ data: team }))
-  )
+  await prisma.team.createMany({
+    data: teams
+  })
+  const docs = await prisma.team.findMany({})
 
   ctx.teams = {
     docs,
