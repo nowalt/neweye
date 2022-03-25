@@ -16,8 +16,22 @@ const Chart = ({
     tooltip: {
       trigger: "axis",
       formatter: (params: any) => {
+        const axisValue = params[0].axisValue;
         const value = params[0].value;
-        return `<div className="tooltip">${value}</div>`;
+        return `
+          <div className="tooltip">
+            <table>
+              <tr>
+                <td style="padding:1px 5px;">time:</td>
+                <td style="padding:1px 5px;">${axisValue}</td>
+              </tr>
+              <tr>
+                <td style="padding:1px 5px;">count:</td>
+                <td style="padding:1px 5px;">${value}</td>
+              </tr>
+            </table>
+          </div>
+        `;
       },
     },
     xAxis: {
