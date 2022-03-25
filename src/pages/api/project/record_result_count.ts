@@ -17,6 +17,10 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const endDate = req.query.endDate as string;
   const action = req.query.action as string;
 
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+
   if (!projectNum) {
     return res.status(200).json({ data: [] });
   }
@@ -36,13 +40,34 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const endTime: any = new Date(endDate);
   const timeDiff = endTime - startTime;
 
-  let groupInterval = 60;
-  if (timeDiff >= 2 * 60 * 60 * 1000) {
+  let groupInterval = 60; // sec
+  if (timeDiff >= 180 * day) {
+    // 180 day 以上，間隔30 day
+    groupInterval = (30 * day) / 1000;
+  } else if (timeDiff >= 30 * day) {
+    // 30 day 以上，間隔7 day
+    groupInterval = (7 * day) / 1000;
+  } else if (timeDiff >= 7 * day) {
+    // 7day 以上，間隔1day
+    groupInterval = (1 * day) / 1000;
+  } else if (timeDiff >= 3 * day) {
+    // 3day 以上，間隔6hr
+    groupInterval = (6 * hour) / 1000;
+  } else if (timeDiff >= 24 * hour) {
+    // 24hr 以上，間隔3hr
+    groupInterval = (3 * hour) / 1000;
+  } else if (timeDiff >= 12 * hour) {
+    // 12hr 以上，間隔1hr
+    groupInterval = (1 * hour) / 1000;
+  } else if (timeDiff >= 5 * hour) {
+    // 5hr 以上，間隔30min
+    groupInterval = (30 * minute) / 1000;
+  } else if (timeDiff >= 2 * hour) {
     // 2hr 以上，間隔10min
-    groupInterval = 10 * 60;
-  } else if (timeDiff >= 30 * 60 * 1000) {
+    groupInterval = (10 * minute) / 1000;
+  } else if (timeDiff >= 30 * minute) {
     // 30min 以上，間隔5min
-    groupInterval = 5 * 60;
+    groupInterval = (5 * minute) / 1000;
   }
 
   // 多取一個時間區間
