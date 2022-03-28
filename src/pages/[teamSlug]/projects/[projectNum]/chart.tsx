@@ -182,8 +182,6 @@ const Chart = () => {
                 setPickerStart(date);
                 setStartDate(date);
               }}
-              timeIntervals={30}
-              showTimeSelect
               withPortal
             />
           </div>
@@ -212,8 +210,6 @@ const Chart = () => {
                 setPickerEnd(date);
                 setEndDate(date);
               }}
-              timeIntervals={30}
-              showTimeSelect
               withPortal
             />
           </div>

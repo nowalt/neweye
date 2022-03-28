@@ -220,6 +220,7 @@ export function useEyeReocrdResultCount({
   action = "",
   startDate = "",
   endDate = "",
+  type = "1",
 }: {
   teamSlug?: string;
   eyeNum?: string;
@@ -227,6 +228,7 @@ export function useEyeReocrdResultCount({
   action?: string;
   startDate?: string;
   endDate?: string;
+  type?: string;
 } = {}) {
   const { data, error } = useSWR(
     "/api/eye/record_result_count" +
@@ -235,7 +237,8 @@ export function useEyeReocrdResultCount({
       `&eyeNum=${eyeNum}` +
       `&action=${action}` +
       `&startDate=${startDate}` +
-      `&endDate=${endDate}`,
+      `&endDate=${endDate}` +
+      `&type=${type}`,
     fetcher
   );
 
