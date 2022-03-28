@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import _ from "lodash";
 import moment from "moment";
@@ -28,6 +28,8 @@ const Chart = () => {
   const [pickerStart, setPickerStart] = useState(initStartTime);
   const [pickerEnd, setPickerEnd] = useState(currentTime);
 
+  const [timeFormat, setTimeFormat] = useState("HH:mm");
+
   const { project, error: projectError } = useProject({
     num: projectNum,
     teamSlug: slug,
@@ -50,6 +52,18 @@ const Chart = () => {
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
     });
+
+  useEffect(() => {
+    if (
+      endDate.getDate() !== startDate.getDate() ||
+      endDate.getMonth() !== startDate.getMonth() ||
+      endDate.getFullYear() !== startDate.getFullYear()
+    ) {
+      setTimeFormat("YYYY-MM-DD HH:mm");
+    } else {
+      setTimeFormat("HH:mm");
+    }
+  }, [startDate, endDate]);
 
   if (projectError) {
     return <div>Error: {projectError.info || projectError.message}</div>;
@@ -193,8 +207,8 @@ const Chart = () => {
               disabled={buttonSelected !== 4}
               selected={pickerEnd}
               onChange={(date: Date) => {
-                date.setSeconds(59);
-                date.setMilliseconds(999);
+                date.setSeconds(0);
+                date.setMilliseconds(0);
                 setPickerEnd(date);
                 setEndDate(date);
               }}
@@ -210,7 +224,7 @@ const Chart = () => {
         <RecordLineChart
           title={`${project?.name || "loading..."}, 入場人數`}
           xAxisData={inData.map((doc: any) =>
-            moment(doc.timeKey).format("HH:mm")
+            moment(doc.timeKey).format(timeFormat)
           )}
           yAxisData={inData.map((doc: any) => doc.sum)}
         />
@@ -218,7 +232,7 @@ const Chart = () => {
         <RecordLineChart
           title={`${project?.name || "loading..."}, 離場人數`}
           xAxisData={outData.map((doc: any) =>
-            moment(doc.timeKey).format("HH:mm")
+            moment(doc.timeKey).format(timeFormat)
           )}
           yAxisData={outData.map((doc: any) => doc.sum)}
         />
