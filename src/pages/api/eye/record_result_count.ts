@@ -54,8 +54,21 @@ const getData1 = async (
     groupInterval = (5 * minute) / 1000;
   }
 
+  // 按照interval數值 把時間取整數 (例如: interval=5 => 15:58 取到 15:55)
+  const startTimeFloor =
+    Math.floor(startTime / (groupInterval * 1000)) * (groupInterval * 1000);
+  const newStartTime = new Date(startTimeFloor);
+  newStartTime.setSeconds(0);
+  newStartTime.setMilliseconds(0);
+
+  const endTimeFloor =
+    Math.floor(endTime / (groupInterval * 1000)) * (groupInterval * 1000);
+  const newEndTime = new Date(endTimeFloor);
+  newEndTime.setSeconds(0);
+  newEndTime.setMilliseconds(0);
+
   // 多取一個時間區間
-  const endTime2 = new Date(endTime.getTime() + groupInterval * 1000);
+  const newEndTime2 = new Date(newEndTime.getTime() + groupInterval * 1000);
 
   const data = await prisma.$queryRaw`
     SELECT
@@ -66,8 +79,8 @@ const getData1 = async (
       EyeRecordResult 
     WHERE eyeId = ${eyeId}  
     AND action = ${action}
-    AND date >= ${startTime}
-    AND date < ${endTime2}    
+    AND date >= ${newStartTime}
+    AND date < ${newEndTime2}    
     GROUP BY 
       timeKey
   `;

@@ -10,6 +10,7 @@ import {
   useEyeReocrdResultCount,
 } from "../../../../../../client/lib/hooks";
 import RecordLineChart from "../../../../../../client/components/RecordLineChart";
+import RecordBarChart from "../../../../../../client/components/RecordBarChart";
 
 const Chart = () => {
   const router = useRouter();
@@ -139,6 +140,7 @@ const Chart = () => {
 
               const startTime = new Date(currentTime);
               startTime.setMinutes(startTime.getMinutes() - 60);
+              startTime.setSeconds(0);
               setStartDate(startTime);
               setEndDate(currentTime);
               setTimeFormat("HH:mm");
@@ -227,7 +229,7 @@ const Chart = () => {
       </div>
 
       <div className="mt-5">
-        <RecordLineChart
+        {/* <RecordLineChart
           title={`${project?.name || "loading..."}, ${
             eye?.name || "loading..."
           }, 入場人數`}
@@ -245,6 +247,26 @@ const Chart = () => {
             moment(doc.timeKey).format(timeFormat)
           )}
           yAxisData={outData.map((doc: any) => doc.sum)}
+        /> */}
+
+        <RecordBarChart
+          title={`${project?.name || "loading..."}, ${
+            eye?.name || "loading..."
+          }, 入場人數`}
+          data={inData.map((doc: any) => [doc.timeKey, doc.sum])}
+          xAxisMin={startDate.toString()}
+          xAxisMax={endDate.toString()}
+          dateType={dateType}
+        />
+
+        <RecordBarChart
+          title={`${project?.name || "loading..."}, ${
+            eye?.name || "loading..."
+          }, 離場人數`}
+          data={outData.map((doc: any) => [doc.timeKey, doc.sum])}
+          xAxisMin={startDate.toString()}
+          xAxisMax={endDate.toString()}
+          dateType={dateType}
         />
       </div>
     </div>
