@@ -29,6 +29,7 @@ const Chart = () => {
   const [pickerEnd, setPickerEnd] = useState(currentTime);
 
   const [timeFormat, setTimeFormat] = useState("HH:mm");
+  const [dateType, setDateType] = useState(1);
 
   const { project, error: projectError } = useProject({
     num: projectNum,
@@ -42,6 +43,7 @@ const Chart = () => {
       action: "in",
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
+      type: dateType.toString(),
     });
 
   const { data: countOutData, error: countOutError } =
@@ -51,19 +53,8 @@ const Chart = () => {
       action: "out",
       startDate: startDate.toISOString(),
       endDate: endDate.toISOString(),
+      type: dateType.toString(),
     });
-
-  useEffect(() => {
-    if (
-      endDate.getDate() !== startDate.getDate() ||
-      endDate.getMonth() !== startDate.getMonth() ||
-      endDate.getFullYear() !== startDate.getFullYear()
-    ) {
-      setTimeFormat("YYYY-MM-DD HH:mm");
-    } else {
-      setTimeFormat("HH:mm");
-    }
-  }, [startDate, endDate]);
 
   if (projectError) {
     return <div>Error: {projectError.info || projectError.message}</div>;
@@ -97,6 +88,8 @@ const Chart = () => {
               startTime.setMinutes(startTime.getMinutes() - 10);
               setStartDate(startTime);
               setEndDate(currentTime);
+              setTimeFormat("HH:mm");
+              setDateType(1);
             }}
           />
           <span className="ml-1">過去10分鐘</span>
@@ -116,6 +109,8 @@ const Chart = () => {
               startTime.setMinutes(startTime.getMinutes() - 30);
               setStartDate(startTime);
               setEndDate(currentTime);
+              setTimeFormat("HH:mm");
+              setDateType(1);
             }}
           />
           <span className="ml-1">過去30分鐘</span>
@@ -135,6 +130,8 @@ const Chart = () => {
               startTime.setMinutes(startTime.getMinutes() - 60);
               setStartDate(startTime);
               setEndDate(currentTime);
+              setTimeFormat("HH:mm");
+              setDateType(1);
             }}
           />
           <span className="ml-1">過去1小時</span>
@@ -154,6 +151,8 @@ const Chart = () => {
 
               setStartDate(pickerStart);
               setEndDate(pickerEnd);
+              setTimeFormat("YYYY-MM-DD");
+              setDateType(2);
             }}
           />
 
@@ -173,7 +172,7 @@ const Chart = () => {
                   ? "cursor-pointer text-blue-800 border-gray-800 font-medium"
                   : "text-gray-300 border-gray-500"
               }`}
-              dateFormat="yyyy-MM-dd HH:mm"
+              dateFormat="yyyy-MM-dd"
               disabled={buttonSelected !== 4}
               selected={pickerStart}
               onChange={(date: Date) => {
@@ -182,8 +181,6 @@ const Chart = () => {
                 setPickerStart(date);
                 setStartDate(date);
               }}
-              timeIntervals={30}
-              showTimeSelect
               withPortal
             />
           </div>
@@ -203,7 +200,7 @@ const Chart = () => {
                   ? "cursor-pointer text-blue-800 border-gray-800 font-medium"
                   : "text-gray-300 border-gray-500"
               }`}
-              dateFormat="yyyy-MM-dd HH:mm"
+              dateFormat="yyyy-MM-dd"
               disabled={buttonSelected !== 4}
               selected={pickerEnd}
               onChange={(date: Date) => {
@@ -212,8 +209,6 @@ const Chart = () => {
                 setPickerEnd(date);
                 setEndDate(date);
               }}
-              timeIntervals={30}
-              showTimeSelect
               withPortal
             />
           </div>

@@ -10,35 +10,16 @@ export interface Request extends NextApiRequest {
   protocol?: string;
 }
 
-export default handler().use(async (req: Request, res: NextApiResponse) => {
-  const teamSlug = req.query.teamSlug as string;
-  const projectNum = parseInt(req.query.projectNum as string);
-  const eyeNum = parseInt(req.query.eyeNum as string);
-  const action = req.query.action as string;
-  const startDate = req.query.startDate as string;
-  const endDate = req.query.endDate as string;
+const minute = 60 * 1000;
+const hour = 60 * minute;
+const day = 24 * hour;
 
-  const minute = 60 * 1000;
-  const hour = 60 * minute;
-  const day = 24 * hour;
-
-  if (!projectNum || !eyeNum) {
-    return res.status(200).json({ data: [] });
-  }
-  const eye = await prisma.eye.findFirst({
-    where: {
-      num: eyeNum,
-      project: {
-        num: projectNum,
-        team: { slug: teamSlug },
-      },
-    },
-  });
-
-  if (!eye) {
-    return res.status(500).json({ error: "找不到資料" });
-  }
-
+const getData1 = async (
+  startDate: any,
+  endDate: any,
+  eyeId: string,
+  action: string
+) => {
   const startTime: any = new Date(startDate);
   const endTime: any = new Date(endDate);
   const timeDiff = endTime - startTime;
@@ -83,13 +64,101 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
       FROM_UNIXTIME( FLOOR(UNIX_TIMESTAMP(date) / ${groupInterval.toString()}) * ${groupInterval.toString()} ) as timeKey
     FROM 
       EyeRecordResult 
-    WHERE eyeId = ${eye.id}  
+    WHERE eyeId = ${eyeId}  
     AND action = ${action}
     AND date >= ${startTime}
     AND date < ${endTime2}    
     GROUP BY 
       timeKey
   `;
+
+  return data;
+};
+
+const getData2 = async (
+  startDate: any,
+  endDate: any,
+  eyeId: string,
+  action: string
+) => {
+  const startTime: any = new Date(startDate);
+  const endTime: any = new Date(endDate);
+
+  const timeDiff = endTime - startTime;
+
+  let groupInterval = 1; // day
+
+  if (timeDiff <= 7 * day) {
+    startTime.setDate(endTime.getDate() - 7);
+    groupInterval = 1;
+  } else if (timeDiff <= 30 * day) {
+    groupInterval = 1;
+  } else if (timeDiff <= 90 * day) {
+    groupInterval = 3;
+  } else {
+    groupInterval = 7;
+  }
+
+  // 多取一個時間區間
+  const endTime2 = new Date(endTime);
+  endTime2.setDate(endTime.getDate() + groupInterval);
+
+  const data: any = await prisma.$queryRaw`
+    SELECT
+      count(*) as dataCount,
+      sum(count) as sum,
+      DAY(CONVERT_TZ(date,'+00:00','+8:00')) as day,
+      MONTH(CONVERT_TZ(date,'+00:00','+8:00')) as month,
+      YEAR(CONVERT_TZ(date,'+00:00','+8:00')) as year
+    FROM 
+      EyeRecordResult 
+    WHERE eyeId = ${eyeId}  
+    AND action = ${action}
+    AND date >= ${startTime}
+    AND date < ${endTime2}    
+    GROUP BY 
+      year, month, day
+  `;
+
+  data.forEach((doc: any) => {
+    doc.timeKey = new Date(doc.year, doc.month - 1, doc.day);
+  });
+
+  return data;
+};
+
+export default handler().use(async (req: Request, res: NextApiResponse) => {
+  const teamSlug = req.query.teamSlug as string;
+  const projectNum = parseInt(req.query.projectNum as string);
+  const eyeNum = parseInt(req.query.eyeNum as string);
+  const action = req.query.action as string;
+  const startDate = req.query.startDate as string;
+  const endDate = req.query.endDate as string;
+  const type = parseInt(req.query.type as string) || 1;
+
+  if (!projectNum || !eyeNum) {
+    return res.status(200).json({ data: [] });
+  }
+  const eye = await prisma.eye.findFirst({
+    where: {
+      num: eyeNum,
+      project: {
+        num: projectNum,
+        team: { slug: teamSlug },
+      },
+    },
+  });
+
+  if (!eye) {
+    return res.status(500).json({ error: "找不到資料" });
+  }
+
+  let data;
+  if (type === 1) {
+    data = await getData1(startDate, endDate, eye.id, action);
+  } else if (type === 2) {
+    data = await getData2(startDate, endDate, eye.id, action);
+  }
 
   if (data) {
     return res.status(200).json({ data });
