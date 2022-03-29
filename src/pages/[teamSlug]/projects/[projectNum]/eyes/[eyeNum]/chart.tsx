@@ -9,7 +9,6 @@ import {
   useEye,
   useEyeReocrdResultCount,
 } from "../../../../../../client/lib/hooks";
-import RecordLineChart from "../../../../../../client/components/RecordLineChart";
 import RecordBarChart from "../../../../../../client/components/RecordBarChart";
 
 const Chart = () => {
@@ -229,26 +228,6 @@ const Chart = () => {
       </div>
 
       <div className="mt-5">
-        {/* <RecordLineChart
-          title={`${project?.name || "loading..."}, ${
-            eye?.name || "loading..."
-          }, 入場人數`}
-          xAxisData={inData.map((doc: any) =>
-            moment(doc.timeKey).format(timeFormat)
-          )}
-          yAxisData={inData.map((doc: any) => doc.sum)}
-        />
-
-        <RecordLineChart
-          title={`${project?.name || "loading..."}, ${
-            eye?.name || "loading..."
-          }, 離場人數`}
-          xAxisData={outData.map((doc: any) =>
-            moment(doc.timeKey).format(timeFormat)
-          )}
-          yAxisData={outData.map((doc: any) => doc.sum)}
-        /> */}
-
         <RecordBarChart
           title={`${project?.name || "loading..."}, ${
             eye?.name || "loading..."

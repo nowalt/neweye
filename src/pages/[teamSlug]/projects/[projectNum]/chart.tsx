@@ -8,7 +8,7 @@ import {
   useProject,
   useProjectReocrdResultCount,
 } from "../../../../client/lib/hooks";
-import RecordLineChart from "../../../../client/components/RecordLineChart";
+import RecordBarChart from "../../../../client/components/RecordBarChart";
 
 const Chart = () => {
   const router = useRouter();
@@ -216,20 +216,20 @@ const Chart = () => {
       </div>
 
       <div className="mt-5">
-        <RecordLineChart
+        <RecordBarChart
           title={`${project?.name || "loading..."}, 入場人數`}
-          xAxisData={inData.map((doc: any) =>
-            moment(doc.timeKey).format(timeFormat)
-          )}
-          yAxisData={inData.map((doc: any) => doc.sum)}
+          data={inData.map((doc: any) => [doc.timeKey, doc.sum])}
+          xAxisMin={startDate.toString()}
+          xAxisMax={endDate.toString()}
+          dateType={dateType}
         />
 
-        <RecordLineChart
+        <RecordBarChart
           title={`${project?.name || "loading..."}, 離場人數`}
-          xAxisData={outData.map((doc: any) =>
-            moment(doc.timeKey).format(timeFormat)
-          )}
-          yAxisData={outData.map((doc: any) => doc.sum)}
+          data={outData.map((doc: any) => [doc.timeKey, doc.sum])}
+          xAxisMin={startDate.toString()}
+          xAxisMax={endDate.toString()}
+          dateType={dateType}
         />
       </div>
     </div>

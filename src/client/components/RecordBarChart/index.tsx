@@ -1,5 +1,6 @@
 import ReactEcharts from "echarts-for-react";
 import moment from "moment";
+import _ from "lodash";
 
 const minute = 60 * 1000;
 const hour = 60 * minute;
@@ -10,7 +11,7 @@ const Chart = ({
   data,
   xAxisMin = null,
   xAxisMax = null,
-  dateType = 1, // 1: 過去一段時間     2: 自選日期
+  dateType = 1, // 1: 過去一段時間   2: 自選日期
 }: {
   title: string;
   data: any;
@@ -24,17 +25,19 @@ const Chart = ({
 
   const timeFormat = dateType === 1 ? "HH:mm" : "YYYY-MM-DD";
 
-  if (dateType > 1) {
+  if (dateType === 2) {
     if (timeDiff <= 7 * day) {
+      // type2: 最少顯示7天, api取資料處也有同樣的運算
       startTime.setDate(endTime.getDate() - 7);
     } else {
       startTime.setDate(startTime.getDate() - 1);
     }
   }
 
-  const check = data.find((doc: any) => new Date(doc[0]) < startTime);
-  if (check && check[0]) {
-    startTime = new Date(check[0]);
+  // 檢查資料時間, 如果資料時間有小於start time, 則重設start time
+  const minTime = _.minBy(data, (doc: any) => doc[0]);
+  if (minTime && minTime[0] && new Date(minTime[0]) < startTime) {
+    startTime = new Date(minTime[0]);
   }
 
   const option = {

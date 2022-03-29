@@ -24,7 +24,7 @@ const getData1 = async (
   const endTime: any = new Date(endDate);
   const timeDiff = endTime - startTime;
 
-  let groupInterval = 60; // sec
+  let groupInterval = 60; // sec   // 資料group的範圍
   if (timeDiff >= 180 * day) {
     // 180 day 以上，間隔30 day
     groupInterval = (30 * day) / 1000;
@@ -54,7 +54,7 @@ const getData1 = async (
     groupInterval = (5 * minute) / 1000;
   }
 
-  // 按照interval數值 把時間取整數 (例如: interval=5 => 15:58 取到 15:55)
+  // 按照interval數值 把開始和結束時間取整數 (例如: interval=5 => 15:58 取到 15:55)
   const startTimeFloor =
     Math.floor(startTime / (groupInterval * 1000)) * (groupInterval * 1000);
   const newStartTime = new Date(startTimeFloor);
@@ -67,7 +67,7 @@ const getData1 = async (
   newEndTime.setSeconds(0);
   newEndTime.setMilliseconds(0);
 
-  // 多取一個時間區間
+  // 結束時間 多取一個時間區間(例如: interval=5 前端傳來的結束時間 15:45, 資料範圍就取到15:50)
   const newEndTime2 = new Date(newEndTime.getTime() + groupInterval * 1000);
 
   const data = await prisma.$queryRaw`
@@ -99,7 +99,7 @@ const getData2 = async (
 
   const timeDiff = endTime - startTime;
 
-  let groupInterval = 1; // day
+  let groupInterval = 1; // day   // 資料group的範圍
 
   if (timeDiff <= 7 * day) {
     startTime.setDate(endTime.getDate() - 7);
@@ -112,7 +112,7 @@ const getData2 = async (
     groupInterval = 7;
   }
 
-  // 多取一個時間區間
+  // 結束時間 多取一個時間區間(例如: interval=1 前端傳來的結束時間 2022-03-10 0:00, 資料範圍就取到 2022-03-11 0:00)
   const endTime2 = new Date(endTime);
   endTime2.setDate(endTime.getDate() + groupInterval);
 
@@ -167,6 +167,7 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   }
 
   let data;
+  // type1 : 過去n小時類型;  type2: 自選日期類型
   if (type === 1) {
     data = await getData1(startDate, endDate, eye.id, action);
   } else if (type === 2) {
