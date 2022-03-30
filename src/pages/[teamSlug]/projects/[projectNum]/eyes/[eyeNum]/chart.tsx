@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/router";
 import _ from "lodash";
-import moment from "moment";
 import DatePicker from "react-datepicker";
 
 import {
@@ -10,6 +9,7 @@ import {
   useEyeReocrdResultCount,
 } from "../../../../../../client/lib/hooks";
 import RecordBarChart from "../../../../../../client/components/RecordBarChart";
+import Header from "../../../../../../client/components/Header";
 
 const Chart = () => {
   const router = useRouter();
@@ -83,7 +83,8 @@ const Chart = () => {
   const outData = countOutData?.data || [];
 
   return (
-    <div>
+    <div className="bg-white min-h-screen min-h-screen-ios">
+      <Header />
       <div className="flex items-center justify-center mt-5">
         <label className="mx-3 inline-flex items-center cursor-pointer">
           <input
