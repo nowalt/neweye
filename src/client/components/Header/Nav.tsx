@@ -57,6 +57,13 @@ export default function Nav() {
           current:
             router.asPath === `/${slug}/projects/${projectNum}/eyes/${eyeNum}`,
         },
+        {
+          name: "記錄圖表",
+          href: `/${slug}/projects/${projectNum}/eyes/${eyeNum}/chart`,
+          current:
+            router.asPath ===
+            `/${slug}/projects/${projectNum}/eyes/${eyeNum}/chart`,
+        },
       ]
     : project
     ? [
@@ -64,6 +71,11 @@ export default function Nav() {
           name: "所有智能眼",
           href: `/${slug}/projects/${projectNum}`,
           current: router.asPath === `/${slug}/projects/${projectNum}`,
+        },
+        {
+          name: "記錄圖表",
+          href: `/${slug}/projects/${projectNum}/chart`,
+          current: router.asPath === `/${slug}/projects/${projectNum}/chart`,
         },
         // {
         //   name: "所有記錄",

@@ -307,3 +307,41 @@ export function useProjectReocrdResultCount({
     error: null,
   };
 }
+
+export function useEyeWithRecords({
+  num = "",
+  projectId = "",
+  skip = 0,
+  take = 20,
+}: {
+  num?: string;
+  projectId?: string;
+  take?: number;
+  skip?: number;
+} = {}) {
+  const { data, error } = useSWR(
+    num && projectId
+      ? `/api/eye/with_records?projectId=${projectId}&num=${num}&skip=${skip}&take=${take}`
+      : null,
+    fetcher
+  );
+
+  const [eye, setEye] = useState(data?.eye);
+  useEffect(() => {
+    if (data?.eye) {
+      setEye(data?.eye);
+    }
+  }, [data]);
+
+  if (error) {
+    return {
+      eye: null,
+      error: error.info || error.message,
+    };
+  }
+
+  return {
+    eye,
+    error: null,
+  };
+}
