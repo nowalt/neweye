@@ -23,7 +23,11 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
     },
     include: {
       records: {
-        select: { id: true, results: true },
+        select: {
+          id: true,
+          date: true,
+          results: true,
+        },
         skip,
         take,
       },
