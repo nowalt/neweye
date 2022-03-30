@@ -103,6 +103,11 @@ const ProjectTaskPage: NextPage = () => {
                                     : ""}
                                 </span>
                               </div>
+                              {/* <div className="flex text-sm  mt-2">
+                                <span className="mr-2 font-semibold text-gray-600 truncate">
+                                  {record.clientId}
+                                </span>
+                              </div> */}
                               {groupKeys.map((key) => {
                                 return (
                                   <div

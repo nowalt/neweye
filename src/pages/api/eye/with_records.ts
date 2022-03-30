@@ -27,6 +27,7 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
           id: true,
           date: true,
           results: true,
+          clientId: true,
         },
         skip,
         take,
