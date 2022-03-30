@@ -39,26 +39,26 @@ const KEYPOINT_FILTER_CONFIG = {
   disableValueScaling: true,
 };
 const COLOR_PALETTE = [
-  "#ffffff",
-  "#800000",
-  "#469990",
-  "#e6194b",
-  "#42d4f4",
-  "#fabed4",
-  "#aaffc3",
-  "#9a6324",
-  "#000075",
-  "#f58231",
-  "#4363d8",
-  "#ffd8b1",
-  "#dcbeff",
-  "#808000",
-  "#ffe119",
-  "#911eb4",
-  "#bfef45",
-  "#f032e6",
-  "#3cb44b",
-  "#a9a9a9",
+  "#ffffff", // 0
+  "#800000", // 1
+  "#469990", // 2
+  "#e6194b", // 3
+  "#42d4f4", // 4
+  "#fabed4", // 5
+  "#aaffc3", // 6
+  "#9a6324", // 7
+  "#000075", // 8
+  "#f58231", // 9
+  "#4363d8", // 10
+  "#ffd8b1", // 11
+  "#dcbeff", // 12
+  "#808000", // 13
+  "#ffe119", // 14
+  "#911eb4", // 15
+  "#bfef45", // 16
+  "#f032e6", // 17
+  "#3cb44b", // 18
+  "#a9a9a9", // 19
 ];
 
 function validateTrackerConfig(config: TrackerConfig): void {
@@ -182,7 +182,12 @@ abstract class Tracker {
    */
   assignTracks(poses: Pose[], simMatrix: number[][], timestamp: number): void {
     console.log("assignTracks", "called");
-    const unmatchedTrackIndices = Array.from(Array(simMatrix[0].length).keys());
+    let unmatchedTrackIndices: any = Array.from(
+      Array(simMatrix[0].length).keys()
+    );
+    unmatchedTrackIndices = unmatchedTrackIndices.map((index: any) => ({
+      index,
+    }));
     const matched: any = [];
     const detectionIndices = Array.from(Array(poses.length).keys());
     const unmatchedDetectionIndices: number[] = [];
@@ -226,20 +231,41 @@ abstract class Tracker {
       // threshold.
       let maxTrackIndex = -1;
       let maxSimilarity = -1;
-      for (const trackIndex of unmatchedTrackIndices) {
+      for (const obj of unmatchedTrackIndices) {
+        const trackIndex = obj.index;
         const similarity = simMatrix[detectionIndex][trackIndex];
         // 有相關性
         if (similarity >= this.minSimilarity && similarity > maxSimilarity) {
           // if (!matched[trackIndex]) {
           // matched[trackIndex] = true;
-          maxTrackIndex = trackIndex;
-          maxSimilarity = similarity;
+          // maxTrackIndex = trackIndex;
+          // maxSimilarity = similarity;
           // } else {
           //   if (similarity >= 0.8) {
           //     dupTrackIndex = trackIndex;
           //     dupSimilarity = similarity;
           //   }
           // }
+          camera.outputDebug.innerHTML += `  > obj: ${JSON.stringify(obj)}\n`;
+          if (typeof obj.detectionIndex !== "undefined") {
+            if (similarity > obj.maxSimilarity) {
+              poses[obj.detectionIndex].id = -1;
+              camera.outputDebug.innerHTML += `  > 配錯了，把之前的變 -1\n`;
+
+              maxTrackIndex = trackIndex;
+              maxSimilarity = similarity;
+              obj.detectionIndex = detectionIndex;
+              obj.maxSimilarity = maxSimilarity;
+            } else {
+              poses[detectionIndex].id = -1;
+              camera.outputDebug.innerHTML += `  > 配錯了，把現在的變 -1\n`;
+            }
+          } else {
+            maxTrackIndex = trackIndex;
+            maxSimilarity = similarity;
+            obj.detectionIndex = detectionIndex;
+            obj.maxSimilarity = maxSimilarity;
+          }
         }
         console.log("  > ", "trackIndex", trackIndex, {
           similarity,
@@ -261,48 +287,26 @@ abstract class Tracker {
         );
         poses[detectionIndex].id = linkedTrack.id;
         camera.outputDebug.innerHTML += `  > poseIndex#${detectionIndex} = trackerId#${linkedTrack.id}\n`;
-        const index = unmatchedTrackIndices.indexOf(maxTrackIndex);
-        unmatchedTrackIndices.splice(index, 1);
-        console.log(
-          "  > ",
-          "因找到相似，所以 unmatchedTrackIndices 移走 index",
-          index,
-          [...unmatchedTrackIndices]
-        );
+        // const index = unmatchedTrackIndices.indexOf(maxTrackIndex);
+        // unmatchedTrackIndices.splice(index, 1);
+        // console.log(
+        //   "  > ",
+        //   "因找到相似，所以 unmatchedTrackIndices 移走 index",
+        //   index,
+        //   [...unmatchedTrackIndices]
+        // );
         matched.push(maxTrackIndex);
       } else {
-        if ((poses[detectionIndex]?.score as number) < 0.25) {
-          console.log(
-            "  > ",
-            "沒有找到與 tracker 相似, 且 pose.score < 0.25, 不可信",
-            maxTrackIndex,
-            maxSimilarity
-          );
-          poses[detectionIndex].id = -1;
-          camera.outputDebug.innerHTML += `  > 沒有找到與 tracker 相似, 且 pose.score(${poses[detectionIndex]?.score}) < 0.25, 不可信\n`;
-        } else {
-          for (const trackIndex of matched) {
-            const similarity = simMatrix[detectionIndex][trackIndex];
-            if (
-              similarity >= this.minSimilarity &&
-              similarity > maxSimilarity
-            ) {
-              maxTrackIndex = trackIndex;
-              maxSimilarity = similarity;
-            }
-          }
-
-          if (maxTrackIndex >= 0) {
+        if (!poses[detectionIndex].id) {
+          if ((poses[detectionIndex]?.score as number) < 0.25) {
             console.log(
               "  > ",
-              "在 matched 中找到重複相似, 不可信",
+              "沒有找到與 tracker 相似, 且 pose.score < 0.25, 不可信",
               maxTrackIndex,
               maxSimilarity
             );
             poses[detectionIndex].id = -1;
-            camera.outputDebug.innerHTML += `  > 在 matched 中找到重複相似, 不可信 ${JSON.stringify(
-              { maxTrackIndex, maxSimilarity }
-            )}\n`;
+            camera.outputDebug.innerHTML += `  > 沒有找到與 tracker 相似, 且 pose.score(${poses[detectionIndex]?.score}) < 0.25, 不可信\n`;
           } else {
             unmatchedDetectionIndices.push(detectionIndex);
             console.log(
@@ -560,6 +564,7 @@ class Context {
   prevCtx0: any;
   outputDebug0: HTMLElement;
   prevOutputDebug0: HTMLElement;
+  mediaRecorder: MediaRecorder;
 
   constructor() {
     this.video = document.getElementById("video") as HTMLVideoElement;
@@ -590,6 +595,36 @@ class Context {
     this.prevOutputDebug0 = document.getElementById(
       "prevOutputDebug0"
     ) as HTMLElement;
+
+    const stream = this.canvas.captureStream();
+    const options = { mimeType: "video/webm; codecs=vp9" };
+    this.mediaRecorder = new MediaRecorder(stream, options);
+    this.mediaRecorder.ondataavailable = this.handleDataAvailable;
+  }
+
+  start() {
+    this.mediaRecorder.start();
+  }
+
+  stop() {
+    this.mediaRecorder.stop();
+  }
+
+  handleDataAvailable(event: any) {
+    if (event.data.size > 0) {
+      const recordedChunks = [event.data];
+
+      // Download.
+      const blob = new Blob(recordedChunks, { type: "video/webm" });
+      const url = URL.createObjectURL(blob);
+      const a: any = document.createElement("a");
+      document.body.appendChild(a);
+      a.style = "display: none";
+      a.href = url;
+      a.download = "pose.webm";
+      a.click();
+      window.URL.revokeObjectURL(url);
+    }
   }
 
   drawCtx(ctx: any = this.ctx) {
@@ -985,7 +1020,7 @@ async function renderResult() {
     camera.outputDebug.innerHTML += "poses3: " + poses3.length + "\n";
   }
   if (poses.length !== poses3.length) {
-    alert("不一樣");
+    // alert("不一樣");
   }
   poses = poses3;
 
@@ -1002,13 +1037,14 @@ async function renderResult() {
 const runFrame = async () => {
   if (camera.video.paused) {
     // video has finished.
+    camera.mediaRecorder.stop();
     camera.clearCtx();
     camera.video.style.visibility = "visible";
     return;
   }
   await renderResult();
-  // window.cancelAnimationFrame(rafId);
-  // rafId = requestAnimationFrame(runFrame);
+  window.cancelAnimationFrame(rafId);
+  rafId = requestAnimationFrame(runFrame);
 };
 
 function VideoInput(props: any) {
@@ -1039,7 +1075,7 @@ function VideoInput(props: any) {
 
       console.log("init tracker!!!");
       tracker = new BoundingBoxTracker({
-        maxTracks: 3 * 15, // 3 times max detections of the multi-pose model.
+        maxTracks: 3 * 20, // 3 times max detections of the multi-pose model.
         maxAge: 1000,
         minSimilarity: 0.15,
       });
@@ -1137,8 +1173,9 @@ function VideoInput(props: any) {
 
     // camera.video.style.visibility = "hidden";
     camera.video.pause();
-    camera.video.currentTime = 0;
-    // camera.video.play();
+    camera.video.currentTime = 0; // 7.9
+    camera.video.play();
+    camera.mediaRecorder.start();
 
     await new Promise((resolve) => {
       camera.video.onseeked = () => {
@@ -1148,14 +1185,14 @@ function VideoInput(props: any) {
 
     await renderResult();
 
-    return;
+    // return;
 
     await runFrame();
   };
 
   const zeroFrame = async () => {
     camera.video.pause();
-    camera.video.currentTime = 8.466577;
+    camera.video.currentTime = 2.733302;
     await new Promise((resolve) => {
       camera.video.onseeked = () => {
         resolve(true);
