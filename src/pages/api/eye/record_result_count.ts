@@ -97,6 +97,16 @@ const getData2 = async (
   const startTime: any = new Date(startDate);
   const endTime: any = new Date(endDate);
 
+  startTime.setHours(0);
+  startTime.setMinutes(0);
+  startTime.setSeconds(0);
+  startTime.setMilliseconds(0);
+
+  endTime.setHours(0);
+  endTime.setMinutes(0);
+  endTime.setSeconds(0);
+  endTime.setMilliseconds(0);
+
   const timeDiff = endTime - startTime;
 
   let groupInterval = 1; // day   // 資料group的範圍
