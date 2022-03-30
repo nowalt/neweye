@@ -121,6 +121,7 @@ model Project {
   @@unique([teamId, num])
 }
 
+// 攝像頭
 model Eye {
   id        String   @id @default(cuid()) @db.VarChar(255)
   createdAt DateTime @default(now())
@@ -180,8 +181,9 @@ model EyeRecordResult {
 
   date DateTime @default(now())
 
-  type  String @db.VarChar(255)
-  count Int    @default(0)
+  type   String  @db.VarChar(255)
+  count  Int     @default(0)
+  action String? @db.VarChar(255) //in or out
 
   projectId String @db.VarChar(255)
 

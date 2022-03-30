@@ -212,3 +212,98 @@ export function useEye({
     error: null,
   };
 }
+
+export function useEyeReocrdResultCount({
+  teamSlug = "",
+  eyeNum = "",
+  projectNum = "",
+  action = "",
+  startDate = "",
+  endDate = "",
+  type = "1",
+}: {
+  teamSlug?: string;
+  eyeNum?: string;
+  projectNum?: string;
+  action?: string;
+  startDate?: string;
+  endDate?: string;
+  type?: string;
+} = {}) {
+  const { data, error } = useSWR(
+    "/api/eye/record_result_count" +
+      `?teamSlug=${teamSlug}` +
+      `&projectNum=${projectNum}` +
+      `&eyeNum=${eyeNum}` +
+      `&action=${action}` +
+      `&startDate=${startDate}` +
+      `&endDate=${endDate}` +
+      `&type=${type}`,
+    fetcher
+  );
+
+  const [result, setResult] = useState(data);
+  useEffect(() => {
+    if (data) {
+      setResult(data);
+    }
+  }, [data]);
+
+  if (error) {
+    return {
+      data: null,
+      error: error.info || error.message,
+    };
+  }
+
+  return {
+    data: result,
+    error: null,
+  };
+}
+
+export function useProjectReocrdResultCount({
+  teamSlug = "",
+  projectNum = "",
+  action = "",
+  startDate = "",
+  endDate = "",
+  type = "1",
+}: {
+  teamSlug?: string;
+  projectNum?: string;
+  action?: string;
+  startDate?: string;
+  endDate?: string;
+  type?: string;
+} = {}) {
+  const { data, error } = useSWR(
+    "/api/project/record_result_count" +
+      `?teamSlug=${teamSlug}` +
+      `&projectNum=${projectNum}` +
+      `&action=${action}` +
+      `&startDate=${startDate}` +
+      `&endDate=${endDate}` +
+      `&type=${type}`,
+    fetcher
+  );
+
+  const [result, setResult] = useState(data);
+  useEffect(() => {
+    if (data) {
+      setResult(data);
+    }
+  }, [data]);
+
+  if (error) {
+    return {
+      data: null,
+      error: error.info || error.message,
+    };
+  }
+
+  return {
+    data: result,
+    error: null,
+  };
+}
