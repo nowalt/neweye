@@ -31,15 +31,17 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
         },
         skip,
         take,
-        orderBy: {
-          date: "desc",
-        },
       },
     },
   });
 
   if (eye) {
-    return res.status(200).json({ eye });
+    return res.status(200).json({
+      eye,
+      pageInfo: {
+        hasNextPage: eye.records.length >= take,
+      },
+    });
   }
 
   return res.status(500).json({ error: "找不到 eye" });

@@ -35,7 +35,11 @@ const ProjectTaskPage: NextPage = () => {
     teamSlug: slug,
   });
 
-  const { eye, error: eyeError } = useEyeWithRecords({
+  const {
+    eye,
+    pageInfo,
+    error: eyeError,
+  } = useEyeWithRecords({
     projectId: project?.id,
     num: eyeNum,
     skip: 0,

@@ -327,9 +327,13 @@ export function useEyeWithRecords({
   );
 
   const [eye, setEye] = useState(data?.eye);
+  const [pageInfo, setPageInfo] = useState(data?.pageInfo);
   useEffect(() => {
     if (data?.eye) {
       setEye(data?.eye);
+    }
+    if (data?.pageInfo) {
+      setPageInfo(data?.pageInfo);
     }
   }, [data]);
 
@@ -342,6 +346,7 @@ export function useEyeWithRecords({
 
   return {
     eye,
+    pageInfo,
     error: null,
   };
 }
