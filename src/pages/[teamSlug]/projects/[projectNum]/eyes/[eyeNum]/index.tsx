@@ -19,13 +19,20 @@ const ProjectTaskPage: NextPage = () => {
   const projectNum = router.query.projectNum as string;
   const eyeNum = router.query.eyeNum as string;
 
-  const currentDate = new Date();
-  currentDate.setHours(0);
-  currentDate.setMinutes(0);
-  currentDate.setSeconds(0);
-  currentDate.setMilliseconds(0);
+  const defaultStart = new Date();
+  defaultStart.setHours(0);
+  defaultStart.setMinutes(0);
+  defaultStart.setSeconds(0);
+  defaultStart.setMilliseconds(0);
 
-  const [date, setDate] = useState(currentDate);
+  const defaultEnd = new Date();
+  defaultEnd.setHours(23);
+  defaultEnd.setMinutes(59);
+  defaultEnd.setSeconds(59);
+  defaultEnd.setMilliseconds(999);
+
+  const [start, setStart] = useState(defaultStart);
+  const [end, setEnd] = useState(defaultEnd);
 
   // 防止未登入的人
   useUser();
@@ -44,6 +51,10 @@ const ProjectTaskPage: NextPage = () => {
     num: eyeNum,
     skip: 0,
     take: 20,
+    filter: {
+      startAt: start.toISOString(),
+      endAt: end.toISOString(),
+    },
   });
 
   if (projectError) {
@@ -72,17 +83,44 @@ const ProjectTaskPage: NextPage = () => {
             <div className="flex">
               <DatePicker
                 id="date-picker"
-                className={`h-4 w-28 rounded-md text-center py-3 px-1 ml-1 text-sm cursor-pointer text-blue-800 border-gray-800 font-medium`}
+                className={`h-4 w-24 rounded-l-md border-r-1 text-center py-3 px-1 text-sm cursor-pointer text-blue-800 border-gray-800 font-medium`}
                 dateFormat="yyyy-MM-dd"
-                selected={date}
+                selected={start}
                 onChange={(d: Date) => {
-                  d.setHours(0);
-                  d.setMinutes(0);
-                  d.setSeconds(0);
-                  d.setMilliseconds(0);
-                  setDate(d);
+                  setStart(d);
                 }}
-                withPortal
+              />
+              <DatePicker
+                id="date-picker"
+                className={`h-4 w-14 rounded-r-md border-l-0 text-center py-3 px-1 text-sm cursor-pointer text-blue-800 border-gray-800 font-medium`}
+                dateFormat="HH:mm"
+                selected={start}
+                onChange={(d: Date) => {
+                  setStart(d);
+                }}
+                showTimeSelect
+                showTimeSelectOnly
+              />
+              <p className="mx-2">-</p>
+              <DatePicker
+                id="date-picker"
+                className={`h-4 w-24 rounded-l-md border-r-1 text-center py-3 px-1 text-sm cursor-pointer text-blue-800 border-gray-800 font-medium`}
+                dateFormat="yyyy-MM-dd"
+                selected={end}
+                onChange={(d: Date) => {
+                  setEnd(d);
+                }}
+              />
+              <DatePicker
+                id="date-picker"
+                className={`h-4 w-14 rounded-r-md border-l-0 text-center py-3 px-1 text-sm cursor-pointer text-blue-800 border-gray-800 font-medium`}
+                dateFormat="HH:mm"
+                selected={end}
+                onChange={(d: Date) => {
+                  setEnd(d);
+                }}
+                showTimeSelect
+                showTimeSelectOnly
               />
             </div>
           </div>
