@@ -15,6 +15,23 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const num = parseInt(req.query.num as string);
   const skip = parseInt(req.query.skip as string);
   const take = parseInt(req.query.take as string);
+  const startAt = req.query.startAt as string;
+  const endAt = req.query.endAt as string;
+
+  const defaultStart = new Date();
+  defaultStart.setHours(0);
+  defaultStart.setMinutes(0);
+  defaultStart.setSeconds(0);
+  defaultStart.setMilliseconds(0);
+
+  const defaultEnd = new Date();
+  defaultEnd.setHours(23);
+  defaultEnd.setMinutes(59);
+  defaultEnd.setSeconds(59);
+  defaultEnd.setMilliseconds(999);
+
+  const startTime = startAt ? new Date(startAt) : defaultStart;
+  const endTime = endAt ? new Date(endAt) : defaultEnd;
 
   const eye = await prisma.eye.findFirst({
     where: {
@@ -23,6 +40,9 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
     },
     include: {
       records: {
+        where: {
+          date: { lte: endTime, gte: startTime },
+        },
         select: {
           id: true,
           date: true,

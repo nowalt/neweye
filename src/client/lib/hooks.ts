@@ -308,20 +308,30 @@ export function useProjectReocrdResultCount({
   };
 }
 
+interface withRecordsFilter {
+  startAt?: string;
+  endAt?: string;
+}
 export function useEyeWithRecords({
   num = "",
   projectId = "",
   skip = 0,
   take = 20,
+  filter,
 }: {
   num?: string;
   projectId?: string;
   take?: number;
   skip?: number;
+  filter?: withRecordsFilter;
 } = {}) {
+  const startAt = filter?.startAt;
+  const endAt = filter?.endAt;
   const { data, error } = useSWR(
     num && projectId
-      ? `/api/eye/with_records?projectId=${projectId}&num=${num}&skip=${skip}&take=${take}`
+      ? `/api/eye/with_records?` +
+          `projectId=${projectId}&num=${num}&skip=${skip}&take=${take}` +
+          ` ${startAt && endAt ? `&startAt=${startAt}&endAt=${endAt}` : ""}  `
       : null,
     fetcher
   );
