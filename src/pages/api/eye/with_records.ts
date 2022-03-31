@@ -51,6 +51,9 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
         },
         skip,
         take,
+        orderBy: {
+          date: "desc",
+        },
       },
     },
   });

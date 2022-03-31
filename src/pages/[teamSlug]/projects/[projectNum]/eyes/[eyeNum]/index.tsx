@@ -141,7 +141,9 @@ const ProjectTaskPage: NextPage = () => {
                               <div className="flex text-sm">
                                 <span className="font-bold text-gray-600 truncate">
                                   {record.date
-                                    ? moment(record.date).format("HH:mm:ss")
+                                    ? moment(record.date).format(
+                                        "HH:mm:ss, MMM DD, yyyy"
+                                      )
                                     : ""}
                                 </span>
                               </div>
