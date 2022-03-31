@@ -11,8 +11,7 @@ export interface Request extends NextApiRequest {
 }
 
 export default handler().use(async (req: Request, res: NextApiResponse) => {
-  const projectId = req.query.projectId as string;
-  const num = parseInt(req.query.num as string);
+  const eyeId = req.query.eyeId as string;
   const skip = parseInt(req.query.skip as string);
   const take = parseInt(req.query.take as string);
   const startAt = req.query.startAt as string;
@@ -33,39 +32,35 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const startTime = startAt ? new Date(startAt) : defaultStart;
   const endTime = endAt ? new Date(endAt) : defaultEnd;
 
+  if (!eyeId) {
+    return res.status(200).json({ records: [] });
+  }
+
   const eye = await prisma.eye.findFirst({
+    where: { id: eyeId },
+  });
+
+  if (!eye) {
+    return res.status(500).json({ error: "找不到 eye" });
+  }
+
+  const records = await prisma.eyeRecord.findMany({
     where: {
-      projectId,
-      num,
+      eyeId: eye.id,
+      date: { lte: endTime, gte: startTime },
     },
-    include: {
-      records: {
-        where: {
-          date: { lte: endTime, gte: startTime },
-        },
-        select: {
-          id: true,
-          date: true,
-          results: true,
-          clientId: true,
-        },
-        skip,
-        take,
-        orderBy: {
-          date: "desc",
-        },
-      },
+    select: {
+      id: true,
+      date: true,
+      results: true,
+      clientId: true,
+    },
+    skip,
+    take,
+    orderBy: {
+      date: "desc",
     },
   });
 
-  if (eye) {
-    return res.status(200).json({
-      eye,
-      pageInfo: {
-        hasNextPage: eye.records.length >= take,
-      },
-    });
-  }
-
-  return res.status(500).json({ error: "找不到 eye" });
+  return res.status(200).json(records);
 });

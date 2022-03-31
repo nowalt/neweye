@@ -4,11 +4,13 @@ import DatePicker from "react-datepicker";
 import { useState } from "react";
 import _ from "lodash";
 import moment from "moment";
+import uuid from "uuid";
 
 import {
   useUser,
   useProject,
-  useEyeWithRecords,
+  useEye,
+  useEyeRecords,
 } from "../../../../../../client/lib/hooks";
 import Header from "../../../../../../client/components/Header";
 import EyeRunner from "../../../../../../client/components/EyeRunner";
@@ -18,6 +20,8 @@ const ProjectTaskPage: NextPage = () => {
   const slug = router.query.teamSlug as string;
   const projectNum = router.query.projectNum as string;
   const eyeNum = router.query.eyeNum as string;
+
+  const pageSize = 20;
 
   const defaultStart = new Date();
   defaultStart.setHours(0);
@@ -42,15 +46,19 @@ const ProjectTaskPage: NextPage = () => {
     teamSlug: slug,
   });
 
-  const {
-    eye,
-    pageInfo,
-    error: eyeError,
-  } = useEyeWithRecords({
-    projectId: project?.id,
+  const { eye, error: eyeError } = useEye({
     num: eyeNum,
-    skip: 0,
-    take: 20,
+    projectId: project?.id,
+  });
+
+  const {
+    records,
+    error: recordsError,
+    size,
+    setSize,
+  } = useEyeRecords({
+    eyeId: eye?.id,
+    take: pageSize,
     filter: {
       startAt: start.toISOString(),
       endAt: end.toISOString(),
@@ -63,6 +71,10 @@ const ProjectTaskPage: NextPage = () => {
 
   if (eyeError) {
     return <div>Error: {eyeError.info || eyeError.message}</div>;
+  }
+
+  if (recordsError) {
+    return <div>Error: {recordsError.info || recordsError.message}</div>;
   }
 
   if (!project || !eye) {
@@ -127,13 +139,13 @@ const ProjectTaskPage: NextPage = () => {
 
           <div className="mt-4 bg-white border">
             <ul role="list" className="divide-y divide-gray-200">
-              {!!eye.records.length &&
-                eye.records.map((record: any) => {
+              {!!records.length &&
+                records.map((record: any, index: number) => {
                   const results = record.results;
                   const groupResult = _.groupBy(results, "type");
                   const groupKeys = _.keys(groupResult);
                   return (
-                    <li key={record.id}>
+                    <li key={record.id + index}>
                       <div className="block hover:bg-gray-50 w-full">
                         <div className="px-4 py-4 flex items-center sm:px-6">
                           <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
@@ -147,11 +159,6 @@ const ProjectTaskPage: NextPage = () => {
                                     : ""}
                                 </span>
                               </div>
-                              {/* <div className="flex text-sm  mt-2">
-                                <span className="mr-2 font-semibold text-gray-600 truncate">
-                                  {record.clientId}
-                                </span>
-                              </div> */}
                               {groupKeys.map((key) => {
                                 return (
                                   <div
@@ -181,7 +188,7 @@ const ProjectTaskPage: NextPage = () => {
                   );
                 })}
 
-              {!eye.records.length && (
+              {!records.length && (
                 <li>
                   <div className="block w-full">
                     <div className="px-4 py-4 flex items-center sm:px-6">
@@ -195,6 +202,17 @@ const ProjectTaskPage: NextPage = () => {
                 </li>
               )}
             </ul>
+          </div>
+          <div className="flex justify-center mt-3">
+            <button
+              type="button"
+              className="order-0 inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              onClick={() => {
+                setSize(size + 1);
+              }}
+            >
+              更多記錄
+            </button>
           </div>
         </div>
       </div>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Router from "next/router";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import useSWRInfinite from "swr/infinite";
+import _ from "lodash";
 
 export const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -312,51 +314,51 @@ interface withRecordsFilter {
   startAt?: string;
   endAt?: string;
 }
-export function useEyeWithRecords({
-  num = "",
-  projectId = "",
-  skip = 0,
+
+export function useEyeRecords({
+  eyeId = "",
   take = 20,
   filter,
 }: {
-  num?: string;
-  projectId?: string;
+  eyeId?: string;
   take?: number;
-  skip?: number;
   filter?: withRecordsFilter;
 } = {}) {
   const startAt = filter?.startAt;
   const endAt = filter?.endAt;
-  const { data, error } = useSWR(
-    num && projectId
-      ? `/api/eye/with_records?` +
-          `projectId=${projectId}&num=${num}&skip=${skip}&take=${take}` +
-          ` ${startAt && endAt ? `&startAt=${startAt}&endAt=${endAt}` : ""}  `
-      : null,
-    fetcher
-  );
 
-  const [eye, setEye] = useState(data?.eye);
-  const [pageInfo, setPageInfo] = useState(data?.pageInfo);
+  const getKey = (pageIndex: number, previousPageData: any) => {
+    if (previousPageData && !previousPageData.length) return null; // reached the end
+    return (
+      `/api/record/eye_records?` +
+      `eyeId=${eyeId}&skip=${pageIndex * take}&take=${take}` +
+      `${startAt && endAt ? `&startAt=${startAt}&endAt=${endAt}` : ""}`
+    );
+  };
+
+  const { data, error, size, setSize } = useSWRInfinite(getKey, fetcher);
+
+  const [records, setRecords] = useState(data || []);
+
   useEffect(() => {
-    if (data?.eye) {
-      setEye(data?.eye);
-    }
-    if (data?.pageInfo) {
-      setPageInfo(data?.pageInfo);
+    if (data) {
+      setRecords(_.flatten(data));
     }
   }, [data]);
 
   if (error) {
     return {
-      eye: null,
+      records: [],
       error: error.info || error.message,
+      size,
+      setSize,
     };
   }
 
   return {
-    eye,
-    pageInfo,
+    records: records || [],
     error: null,
+    size,
+    setSize,
   };
 }
