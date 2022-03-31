@@ -5,17 +5,20 @@ module.exports = async (prisma, ctx) => {
     {
       name: 'project1',
       num: 1,
-      teamId: ctx.teams.obj.slug_team_1.id
+      teamId: ctx.teams.obj.slug_team_1.id,
+      type: 'people-count'
     },
     {
       name: 'project2',
       num: 2,
-      teamId: ctx.teams.obj.slug_team_2.id
+      teamId: ctx.teams.obj.slug_team_2.id,
+      type: 'people-count'
     },
     {
       name: 'project3',
       num: 3,
-      teamId: ctx.teams.obj.slug_team_3.id
+      teamId: ctx.teams.obj.slug_team_3.id,
+      type: 'car-count'
     }
   ]
 
