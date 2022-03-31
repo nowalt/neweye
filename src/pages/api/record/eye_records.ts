@@ -32,21 +32,14 @@ export default handler().use(async (req: Request, res: NextApiResponse) => {
   const startTime = startAt ? new Date(startAt) : defaultStart;
   const endTime = endAt ? new Date(endAt) : defaultEnd;
 
+  // 第一時間 eyeId 會是 undefined, 所以不傳error 而是傳空陣列回去
   if (!eyeId) {
     return res.status(200).json({ records: [] });
   }
 
-  const eye = await prisma.eye.findFirst({
-    where: { id: eyeId },
-  });
-
-  if (!eye) {
-    return res.status(500).json({ error: "找不到 eye" });
-  }
-
   const records = await prisma.eyeRecord.findMany({
     where: {
-      eyeId: eye.id,
+      eyeId,
       date: { lte: endTime, gte: startTime },
     },
     select: {
