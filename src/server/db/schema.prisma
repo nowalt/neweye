@@ -117,6 +117,12 @@ model Project {
   eyeRecordResults     EyeRecordResult[]
   eyeRecordAttachments EyeRecordAttachment[]
 
+  // TODO: project 需要顯示什麼圖表
+  // 不是由 eyes 去決定
+  // 是創建 project 的一刻就已經知是什麼類型的 project
+  // 然後影響 ui
+  type String? @db.VarChar(255)
+
   // @@unique([teamId, slug])
   @@unique([teamId, num])
 }
@@ -143,6 +149,10 @@ model Eye {
   records           EyeRecord[]
   recordResults     EyeRecordResult[]
   recordAttachments EyeRecordAttachment[]
+
+  // TODO: 要有 settings 類似 json 的架構去記低 areas 等資料
+  // 因為 areas 不是所有 eye 都有這個欄位，所以放在 settings
+  settings Json?
 
   @@unique([projectId, num])
 }
