@@ -109,8 +109,6 @@ model Project {
   // 專案會被關閉
   closedAt DateTime?
 
-  type String? @db.VarChar(255)
-
 
   // project 所屬的 team
   team Team @relation(fields: [teamId], references: [id])
