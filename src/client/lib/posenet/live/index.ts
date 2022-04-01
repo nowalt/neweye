@@ -14,14 +14,10 @@ let startInferenceTime: any,
   numInferences = 0;
 let inferenceTimeSum = 0,
   lastPanelUpdate = 0;
-let rafId;
+let rafId: number;
 const SECOND_TO_MICRO_SECONDS = 1e6;
 
-const tracker = new BoundingBoxTracker({
-  maxTracks: 3 * 20, // 3 times max detections of the multi-pose model.
-  maxAge: 1000,
-  minSimilarity: 0.15,
-});
+let tracker: BoundingBoxTracker;
 
 const { NEGATIVE_INFINITY, POSITIVE_INFINITY } = Number;
 function getBoundingBox(keypoints: Keypoint[]): {
@@ -109,6 +105,7 @@ async function renderResult() {
     } catch (error) {
       detector.dispose();
       detector = null;
+      console.log(error);
       alert(error);
     }
 
@@ -153,6 +150,7 @@ async function renderResult() {
 async function renderPrediction() {
   await renderResult();
 
+  window.cancelAnimationFrame(rafId);
   rafId = requestAnimationFrame(renderPrediction);
 }
 
@@ -162,6 +160,12 @@ export async function app() {
   stats = setupStats();
 
   camera = await Camera.setupCamera(STATE.camera);
+
+  tracker = new BoundingBoxTracker({
+    maxTracks: 3 * 20, // 3 times max detections of the multi-pose model.
+    maxAge: 1000,
+    minSimilarity: 0.15,
+  });
 
   await setBackendAndEnvFlags(STATE.flags, STATE.backend);
 
@@ -173,7 +177,17 @@ export async function app() {
   // camera.ctx.lineTo(200, 100);
   // camera.ctx.stroke();
 
-  setTimeout(() => {
-    console.log("STATE", STATE);
-  }, 2000);
+  // setTimeout(() => {
+  //   console.log("STATE", STATE);
+  // }, 2000);
+}
+
+export function dispose() {
+  detector.dispose();
+  detector = null;
+  numInferences = 0;
+  inferenceTimeSum = 0;
+  lastPanelUpdate = 0;
+
+  window.cancelAnimationFrame(rafId);
 }

@@ -8,6 +8,10 @@ export function setupStats() {
   const parent = document.getElementById("stats") as HTMLElement;
   parent.appendChild(stats.domElement);
 
+  stats.domElement.style.position = "absolute";
+  stats.domElement.style.right = 0;
+  stats.domElement.style.left = "auto";
+
   const statsPanes = parent.querySelectorAll("canvas");
 
   for (let i = 0; i < statsPanes.length; ++i) {
