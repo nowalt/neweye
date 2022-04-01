@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
 import { useRouter } from "next/router";
 import DatePicker from "react-datepicker";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import _ from "lodash";
 import moment from "moment";
-import uuid from "uuid";
+import InfiniteScroll from "react-infinite-scroller";
 
 import {
   useUser,
@@ -17,6 +17,7 @@ import EyeRunner from "../../../../../../client/components/EyeRunner";
 
 const ProjectTaskPage: NextPage = () => {
   const router = useRouter();
+  const isFetchMore = useRef(false);
   const slug = router.query.teamSlug as string;
   const projectNum = router.query.projectNum as string;
   const eyeNum = router.query.eyeNum as string;
@@ -64,6 +65,10 @@ const ProjectTaskPage: NextPage = () => {
       endAt: end.toISOString(),
     },
   });
+
+  useEffect(() => {
+    isFetchMore.current = false;
+  }, [records]);
 
   if (projectError) {
     return <div>Error: {projectError.info || projectError.message}</div>;
@@ -141,54 +146,72 @@ const ProjectTaskPage: NextPage = () => {
 
           <div className="mt-4 bg-white border">
             <ul role="list" className="divide-y divide-gray-200">
-              {!!records.length &&
-                records.map((record: any, index: number) => {
-                  const results = record.results;
-                  const groupResult = _.groupBy(results, "type");
-                  const groupKeys = _.keys(groupResult);
-                  return (
-                    <li key={record.id + index}>
-                      <div className="block hover:bg-gray-50 w-full">
-                        <div className="px-4 py-4 flex items-center sm:px-6">
-                          <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
-                            <div className="truncate">
-                              <div className="flex text-sm">
-                                <span className="font-bold text-gray-600 truncate">
-                                  {record.date
-                                    ? moment(record.date).format(
-                                        "HH:mm:ss, MMM DD, yyyy"
-                                      )
-                                    : ""}
-                                </span>
+              {!!records.length && (
+                <InfiniteScroll
+                  loadMore={async () => {
+                    if (isFetchMore.current) return;
+                    isFetchMore.current = true;
+                    setSize(size + 1);
+                  }}
+                  hasMore={hasNextPage}
+                  pageStart={0}
+                  threshold={750}
+                  initialLoad={false}
+                  loader={
+                    <div className="flex justify-center">
+                      <p>loading...</p>
+                    </div>
+                  }
+                >
+                  {records.map((record: any, index: number) => {
+                    const results = record.results;
+                    const groupResult = _.groupBy(results, "type");
+                    const groupKeys = _.keys(groupResult);
+                    return (
+                      <li key={record.id + index}>
+                        <div className="block hover:bg-gray-50 w-full">
+                          <div className="px-4 py-4 flex items-center sm:px-6">
+                            <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+                              <div className="truncate">
+                                <div className="flex text-sm">
+                                  <span className="font-bold text-gray-600 truncate">
+                                    {record.date
+                                      ? moment(record.date).format(
+                                          "HH:mm:ss, MMM DD, yyyy"
+                                        )
+                                      : ""}
+                                  </span>
+                                </div>
+                                {groupKeys.map((key) => {
+                                  return (
+                                    <div
+                                      key={key}
+                                      className="flex text-sm ml-3 mt-2"
+                                    >
+                                      <span className="mx-2 font-semibold text-gray-600 truncate">
+                                        {key}
+                                      </span>
+                                      {groupResult[key].map((result) => (
+                                        <p
+                                          key={result.id}
+                                          className="mx-2 font-medium text-gray-600 truncate"
+                                        >
+                                          {`${result.action}:${result.count}`}
+                                        </p>
+                                      ))}
+                                    </div>
+                                  );
+                                })}
                               </div>
-                              {groupKeys.map((key) => {
-                                return (
-                                  <div
-                                    key={key}
-                                    className="flex text-sm ml-3 mt-2"
-                                  >
-                                    <span className="mx-2 font-semibold text-gray-600 truncate">
-                                      {key}
-                                    </span>
-                                    {groupResult[key].map((result) => (
-                                      <p
-                                        key={result.id}
-                                        className="mx-2 font-medium text-gray-600 truncate"
-                                      >
-                                        {`${result.action}:${result.count}`}
-                                      </p>
-                                    ))}
-                                  </div>
-                                );
-                              })}
+                              <div className="hidden flex-shrink-0 sm:ml-5 sm:block"></div>
                             </div>
-                            <div className="hidden flex-shrink-0 sm:ml-5 sm:block"></div>
                           </div>
                         </div>
-                      </div>
-                    </li>
-                  );
-                })}
+                      </li>
+                    );
+                  })}
+                </InfiniteScroll>
+              )}
 
               {!records.length && (
                 <li>
@@ -205,7 +228,7 @@ const ProjectTaskPage: NextPage = () => {
               )}
             </ul>
           </div>
-          {hasNextPage && (
+          {/* {hasNextPage && (
             <div className="flex justify-center mt-3">
               <button
                 type="button"
@@ -217,7 +240,7 @@ const ProjectTaskPage: NextPage = () => {
                 更多記錄
               </button>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>
