@@ -329,6 +329,7 @@ export function useEyeRecords({
 
   const getKey = (pageIndex: number, previousPageData: any) => {
     if (previousPageData && !previousPageData.length) return null; // reached the end
+    if (!eyeId) return null;
     return (
       `/api/record/eye_records?` +
       `eyeId=${eyeId}&skip=${pageIndex * take}&take=${take}` +

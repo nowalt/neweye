@@ -68,7 +68,7 @@ const ProjectTaskPage: NextPage = () => {
 
   useEffect(() => {
     isFetchMore.current = false;
-  }, [records]);
+  }, [size]);
 
   if (projectError) {
     return <div>Error: {projectError.info || projectError.message}</div>;
@@ -158,7 +158,7 @@ const ProjectTaskPage: NextPage = () => {
                   threshold={750}
                   initialLoad={false}
                   loader={
-                    <div className="flex justify-center">
+                    <div key={0} className="flex justify-center">
                       <p>loading...</p>
                     </div>
                   }
@@ -167,6 +167,7 @@ const ProjectTaskPage: NextPage = () => {
                     const results = record.results;
                     const groupResult = _.groupBy(results, "type");
                     const groupKeys = _.keys(groupResult);
+
                     return (
                       <li key={record.id + index}>
                         <div className="block hover:bg-gray-50 w-full">
@@ -182,23 +183,25 @@ const ProjectTaskPage: NextPage = () => {
                                       : ""}
                                   </span>
                                 </div>
-                                {groupKeys.map((key) => {
+                                {groupKeys.map((key, index2) => {
                                   return (
                                     <div
-                                      key={key}
+                                      key={key + index2}
                                       className="flex text-sm ml-3 mt-2"
                                     >
                                       <span className="mx-2 font-semibold text-gray-600 truncate">
                                         {key}
                                       </span>
-                                      {groupResult[key].map((result) => (
-                                        <p
-                                          key={result.id}
-                                          className="mx-2 font-medium text-gray-600 truncate"
-                                        >
-                                          {`${result.action}:${result.count}`}
-                                        </p>
-                                      ))}
+                                      {groupResult[key].map(
+                                        (result, index3) => (
+                                          <p
+                                            key={result.id + index3}
+                                            className="mx-2 font-medium text-gray-600 truncate"
+                                          >
+                                            {`${result.action}:${result.count}`}
+                                          </p>
+                                        )
+                                      )}
                                     </div>
                                   );
                                 })}
