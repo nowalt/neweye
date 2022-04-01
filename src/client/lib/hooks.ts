@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Router from "next/router";
 import useSWR from "swr";
 import useSWRImmutable from "swr/immutable";
+import useSWRInfinite from "swr/infinite";
+import _ from "lodash";
 
 export const fetcher = async (url: string) => {
   const res = await fetch(url);
@@ -308,40 +310,55 @@ export function useProjectReocrdResultCount({
   };
 }
 
-export function useEyeWithRecords({
-  num = "",
-  projectId = "",
-  skip = 0,
-  take = 20,
-}: {
-  num?: string;
-  projectId?: string;
-  take?: number;
-  skip?: number;
-} = {}) {
-  const { data, error } = useSWR(
-    num && projectId
-      ? `/api/eye/with_records?projectId=${projectId}&num=${num}&skip=${skip}&take=${take}`
-      : null,
-    fetcher
-  );
+interface withRecordsFilter {
+  startAt?: string;
+  endAt?: string;
+}
 
-  const [eye, setEye] = useState(data?.eye);
+export function useEyeRecords({
+  eyeId = "",
+  take = 20,
+  filter,
+}: {
+  eyeId?: string;
+  take?: number;
+  filter?: withRecordsFilter;
+} = {}) {
+  const startAt = filter?.startAt;
+  const endAt = filter?.endAt;
+
+  const getKey = (pageIndex: number, previousPageData: any) => {
+    if (previousPageData && !previousPageData.length) return null; // reached the end
+    return (
+      `/api/record/eye_records?` +
+      `eyeId=${eyeId}&skip=${pageIndex * take}&take=${take}` +
+      `${startAt && endAt ? `&startAt=${startAt}&endAt=${endAt}` : ""}`
+    );
+  };
+
+  const { data, error, size, setSize } = useSWRInfinite(getKey, fetcher);
+
+  const [records, setRecords] = useState(data || []);
+
   useEffect(() => {
-    if (data?.eye) {
-      setEye(data?.eye);
+    if (data) {
+      setRecords(_.flatten(data));
     }
   }, [data]);
 
   if (error) {
     return {
-      eye: null,
+      records: [],
       error: error.info || error.message,
+      size,
+      setSize,
     };
   }
 
   return {
-    eye,
+    records: records || [],
     error: null,
+    size,
+    setSize,
   };
 }
