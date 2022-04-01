@@ -155,6 +155,10 @@ model Eye {
   // 因為 areas 不是所有 eye 都有這個欄位，所以放在 settings
   settings Json?
 
+  // runner id
+  runnerId String @default(cuid()) @db.VarChar(255)
+
+  @@unique([runnerId])
   @@unique([projectId, num])
 }
 
