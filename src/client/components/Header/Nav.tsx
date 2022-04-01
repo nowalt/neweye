@@ -64,6 +64,13 @@ export default function Nav() {
             router.asPath ===
             `/${slug}/projects/${projectNum}/eyes/${eyeNum}/chart`,
         },
+        {
+          name: "設定",
+          href: `/${slug}/projects/${projectNum}/eyes/${eyeNum}/setting`,
+          current:
+            router.asPath ===
+            `/${slug}/projects/${projectNum}/eyes/${eyeNum}/setting`,
+        },
       ]
     : project
     ? [
